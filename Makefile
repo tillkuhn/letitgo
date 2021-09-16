@@ -30,7 +30,7 @@ format: ## goimports -w -l .
 
 fmt: format  ## alias for format
 
-lint: format ## golangci-lint run
+lint: format ## golangci-lint run (./... is implicit)
 	golangci-lint run
 
 # https://github.com/psampaz/go-mod-outdated
