@@ -40,7 +40,7 @@ func main() {
 		Text: "Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.",
 	}
 	log.Printf("%v", document)
-
+	runWithRetry()
 }
 
 // HandleJob increments the processed counter
@@ -84,7 +84,9 @@ func runWithRetry() {
 	}
 	//connected
 	b.Reset()
-	conn.Write([]byte("hello world!"))
+	if _, err := conn.Write([]byte("hello world!")); err != nil {
+		log.Println(err)
+	}
 	// ... Read ... Write ... etc
 	conn.Close()
 	//disconnected

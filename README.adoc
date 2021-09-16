@@ -1,0 +1,3 @@
+= My Personal Go Playground
+
+image:https://golang.org/lib/godoc/images/footer-gopher.jpg[]
