@@ -1,3 +1,17 @@
 = My Personal Go Playground
 
 image:https://golang.org/lib/godoc/images/footer-gopher.jpg[]
+
+=== Add recent version of a module
+
+----
+$ go get "github.com/kelseyhightower/envconfig"
+go get: added github.com/kelseyhightower/envconfig v1.4.0
+----
+
+=== Pre-commit hook
+Running golangci-lint as part of your Git pre-commit hooks is a great way to ensure that all Go code that is checked into source control is linted properly
+
+* https://freshman.tech/linting-golang/#setting-up-a-pre-commit-hook[]
+* https://pre-commit.com/#install[Install pre-commit to manage multi-language pre-commit hooks (python based)]
+* https://github.com/TekWizely/pre-commit-golang[a complete repo full of golang pre-commit hooks]
