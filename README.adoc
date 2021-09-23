@@ -1,10 +1,13 @@
-= My Personal Go Playground
+= Let it Go - My Personal Go Playground
 
-Most importantly: Install the great https://github.com/golangci/golangci-lint[golangci-lint]
+== Get started
+
+Get https://golang.org/doc/install[Go] and - most importantly - install the great https://github.com/golangci/golangci-lint[golangci-lint]
 and follow the advice of their "Bug Gopher"!
 
 image:https://raw.githubusercontent.com/golangci/golangci-lint/master/assets/go.png[alt=Flower,width=240,height=240]
 
+== Snippets
 
 === Add recent version of a module
 
@@ -13,7 +16,7 @@ $ go get "github.com/kelseyhightower/envconfig"
 go get: added github.com/kelseyhightower/envconfig v1.4.0
 ----
 
-=== Setup Pre-commit hook
+=== Setup Git Pre-commit hook
 
 * https://freshman.tech/linting-golang/#setting-up-a-pre-commit-hook[]
 * https://pre-commit.com/#install[Install pre-commit to manage multi-language pre-commit hooks (python based)]
