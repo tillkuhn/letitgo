@@ -1,7 +1,8 @@
-package main
+package messaging
 
 import (
 	"fmt"
+	"log"
 	"sync"
 )
 
@@ -26,7 +27,7 @@ func (s *Queue) Enqueue(i interface{}) {
 	// For is Go's "while"
 	for len(s.items) >= s.maxLen {
 		popped := s.Dequeue()
-		fmt.Printf("%v popped\n", popped)
+		log.Printf("Element %v was dequed", popped)
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()

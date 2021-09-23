@@ -2,18 +2,19 @@
 package config
 
 import (
-	"github.com/kelseyhightower/envconfig"
 	"log"
+
+	"github.com/kelseyhightower/envconfig"
 )
 
 // Config Specification
 type Config struct {
-	AWSRegion   string   `default:"eu-central-1" required:"false" desc:"AWS Region" split_words:"true"`
-	SNSEnabled  bool     `default:"false" required:"false" desc:"Enable SNS" split_words:"true"`
-	MaxAttempts int      `default:"4" required:"true" desc:"Max attempts" split_words:"true"`
-	Brokers     []string `required:"false" desc:"List of brokers" split_words:"true"`
+	AWSRegion   string         `default:"eu-central-1" required:"false" desc:"AWS Region" split_words:"true"`
+	SNSEnabled  bool           `default:"false" required:"false" desc:"Enable SNS" split_words:"true"`
+	MaxAttempts int            `default:"4" required:"true" desc:"Max attempts" split_words:"true"`
+	Brokers     []string       `required:"false" desc:"List of brokers" split_words:"true"`
 	ColorCodes  map[string]int `split_words:"true"`
-	ApiKey      string   `required:"true" split_words:"true"`
+	ApiKey      string         `required:"true" split_words:"true"`
 }
 
 // ProcessEnv configures the app with https://github.com/kelseyhightower/envconfig
@@ -27,4 +28,3 @@ func ProcessEnv(appPrefix string) *Config {
 	}
 	return &config
 }
-
