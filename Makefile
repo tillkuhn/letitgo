@@ -24,6 +24,7 @@ image: build ## local docker build
 test: ## go test everything
 	go test -v -coverpkg=./... -coverprofile=coverage.out ./...
 	@go tool cover -func coverage.out | grep "total:"
+	go tool cover -html=coverage.out -o coverage.html
 
 format: ## goimports -w -l .
 	goimports -w -l .
@@ -35,7 +36,7 @@ lint: format ## golangci-lint run (./... is implicit)
 
 # https://github.com/psampaz/go-mod-outdated
 outdated: ## show outdated direct dependencies
-	go get -u github.com/psampaz/go-mod-outdated
+	go install github.com/psampaz/go-mod-outdated
 	go list -u -m -json all | go-mod-outdated -direct
 
 run: ## go run everything that is not a _test

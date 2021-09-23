@@ -1,4 +1,5 @@
-package main
+// Package config provides utils that make it easier to configure your app
+package config
 
 import (
 	"github.com/kelseyhightower/envconfig"
@@ -12,6 +13,7 @@ type Config struct {
 	MaxAttempts int      `default:"4" required:"true" desc:"Max attempts" split_words:"true"`
 	Brokers     []string `required:"false" desc:"List of brokers" split_words:"true"`
 	ColorCodes  map[string]int `split_words:"true"`
+	ApiKey      string   `required:"true" split_words:"true"`
 }
 
 // ProcessEnv configures the app with https://github.com/kelseyhightower/envconfig
@@ -20,7 +22,8 @@ func ProcessEnv(appPrefix string) *Config {
 	// populates the appPrefix struct based on environment variables
 	err := envconfig.Process(appPrefix, &config)
 	if err != nil {
-		log.Fatalf("Cannot process envconfig: %v", err.Error())
+		log.Printf("Cannot process envconfig: %v", err.Error())
+		return nil
 	}
 	return &config
 }

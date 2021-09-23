@@ -3,3 +3,4 @@ upload/
 dist/
 testfiles/
 coverage.out
+coverage.html

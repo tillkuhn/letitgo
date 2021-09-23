@@ -20,3 +20,6 @@ go get: added github.com/kelseyhightower/envconfig v1.4.0
 * https://github.com/TekWizely/pre-commit-golang[a complete repo full of golang pre-commit hooks]
 
 ---
+
+=== Links
+* https://github.com/tillkuhn/gop/[]
