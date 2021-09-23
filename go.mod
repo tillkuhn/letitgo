@@ -3,6 +3,7 @@ module tillkuhn/goplay
 go 1.16
 
 require (
+	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
