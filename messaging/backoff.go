@@ -28,7 +28,7 @@ func RunWithBackoff(maxAttempts int) error {
 		if err == nil {
 			log.Printf("Connected after %d attempt(s)", attempts)
 			break
-		// we have an error - either try again or give up	
+			// we have an error - either try again or give up
 		} else if attempts >= maxAttempts {
 			errMsg := fmt.Sprintf("error %s, max Attemps %d reached. I give up", err, maxAttempts)
 			log.Print(errMsg)

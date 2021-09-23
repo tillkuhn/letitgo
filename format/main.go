@@ -2,16 +2,17 @@ package format
 
 import (
 	"fmt"
-	"github.com/dustin/go-humanize"
 	"time"
+
+	"github.com/dustin/go-humanize"
 )
 
-const 	JwtClaimExpiry  = "exp"
+const JwtClaimExpiry = "exp"
 
 func HumanizeTokenExpiry(claims map[string]interface{}) (expiryInfo string, err error) {
 	expires, ok := claims[JwtClaimExpiry].(float64)
 	if !ok {
-		return "",fmt.Errorf("exp claim %v for expiry does not exist or cannot be cast to expected float64", claims["exp"])
+		return "", fmt.Errorf("exp claim %v for expiry does not exist or cannot be cast to expected float64", claims["exp"])
 	} else {
 		severity := "👍"
 		diff := int64(expires) - time.Now().Unix()
@@ -20,5 +21,5 @@ func HumanizeTokenExpiry(claims map[string]interface{}) (expiryInfo string, err 
 		}
 		expiryInfo = fmt.Sprintf("%s %s", humanize.Time(time.Unix(int64(expires), 0)), severity)
 	}
-	return expiryInfo,nil
+	return expiryInfo, nil
 }
