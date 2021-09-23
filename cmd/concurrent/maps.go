@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"sync"
 )
 
@@ -20,7 +21,7 @@ func main() {
 		wait.Done()
 	}()
 	for i := 0; i < iterations; i++ {
-		println(m[key])
+		log.Printf("key: %d",m[key])
 	}
 	wait.Wait()
 }
