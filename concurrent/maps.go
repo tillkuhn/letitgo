@@ -1,18 +1,14 @@
-package main
+package concurrent
 
 import (
 	"log"
 	"sync"
 )
 
-func main() {
-	simulateRaceCondition()
-}
-
-// https://github.com/MicahParks/keyfunc/issues/16
+// SimulateRaceCondition https://github.com/MicahParks/keyfunc/issues/16
 // Some people are familiar with the map read/write race condition. For those who are not,
 //  take a look at this example. It should cause a Go panic.
-func simulateRaceCondition() {
+func SimulateRaceCondition() {
 	m := make(map[string]int)
 	wait := sync.WaitGroup{}
 	iterations := 1000

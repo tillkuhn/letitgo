@@ -40,5 +40,5 @@ outdated: ## show outdated direct dependencies
 	go list -u -m -json all | go-mod-outdated -direct
 
 run: ## go run everything that is not a _test
-	go run $(shell ls -1 *.go | grep -v _test.go)
+	go run cmd/run/main.go
 
