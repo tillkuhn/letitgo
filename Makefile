@@ -39,6 +39,10 @@ outdated: ## show outdated direct dependencies
 	go install github.com/psampaz/go-mod-outdated
 	go list -u -m -json all | go-mod-outdated -direct
 
-run: ## go run everything that is not a _test
-	go run cmd/run/main.go
+job-queue: ## go run cmd/run/main.go
+	go run cmd/run/main.go job-queue
+
+
+prometheus: ## go run cmd/run/main.go
+	go run cmd/run/main.go prometheus
 
