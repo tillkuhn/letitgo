@@ -66,10 +66,10 @@ func DoWork() {
 
 }
 
-// TryEnqueue tries to enqueue a job to the given job channel. Returns true if
+// tryEnqueue tries to enqueue a job to the given job channel. Returns true if
 // the operation was successful, and false if enqueuing would not have been
 // possible without blocking. Job is not enqueued in the latter case.
-func tryEnqueue(job Job, jobChan /*<-*/ chan Job) bool {
+func tryEnqueue(job Job, jobChan chan<- Job) bool {
 	select {
 	case jobChan <- job:
 		return true
