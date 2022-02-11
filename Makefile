@@ -21,8 +21,11 @@ image: build ## local docker build
 
 # read https://blog.seriesci.com/how-to-measure-code-coverage-in-go/ for total coverage
 # and https://stackoverflow.com/questions/33444968/how-to-get-all-packages-code-coverage-together-in-go
-test: ## go test everything
-	go test -v -coverpkg=./... -coverprofile=coverage.out ./...
+# if you don't want to rely on external gotest tool with colors etc., simple replace gotest with this line:
+# go test -v -coverpkg=./... -coverprofile=coverage.out ./...
+test: ## run tests with coverage report
+	go install github.com/rakyll/gotest@v0.0.6
+	gotest -v -coverpkg=./... -coverprofile=coverage.out ./...
 	@go tool cover -func coverage.out | grep "total:"
 	go tool cover -html=coverage.out -o coverage.html
 
