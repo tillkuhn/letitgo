@@ -12,15 +12,13 @@ type contextKey int
 const (
 	requestIdKey contextKey = iota
 	userIdKey
-
 )
-
 
 func DoWithContext(ctx context.Context) error {
 	requestId := ctx.Value(requestIdKey)
 	if requestId == nil {
 		return errors.New("requestId not set")
 	}
-	log.Printf("requestId %v from %v",requestId,ctx.Value(userIdKey))
+	log.Printf("requestId %v from %v", requestId, ctx.Value(userIdKey))
 	return nil
 }

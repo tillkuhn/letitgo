@@ -2,10 +2,13 @@ package types
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
+// Sets in Go. Go does not have a type for sets.
+// A better alternative is to use map[T]struct{} (a map with empty structs as values).
 // https://emersion.fr/blog/2017/sets-in-go/
 
 func TestSet(t *testing.T) {
