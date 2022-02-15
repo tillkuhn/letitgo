@@ -21,6 +21,8 @@ func TestIntEnum(t *testing.T) {
 	assert.False(t, rice == Jasmin) // sure it's false, but no compile error if you compare
 	p := fmt.Sprintf("%v", TomKa)   // prints 1 as there is no String()
 	assert.Equal(t, "1", p)
+	assert.Equal(t, 0, int(Pho)) // works int == int
+
 }
 
 func TestStringEnum(t *testing.T) {
