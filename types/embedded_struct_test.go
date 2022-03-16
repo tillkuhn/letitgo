@@ -2,8 +2,9 @@ package types
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // SOURCE: https://eli.thegreenplace.net/2020/embedding-in-go-part-1-structs-in-structs/
