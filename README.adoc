@@ -24,5 +24,22 @@ go get: added github.com/kelseyhightower/envconfig v1.4.0
 
 ---
 
+=== Cobra
+
+https://github.com/spf13/cobra-cli/blob/main/README.md[source]
+
+----
+$ cobra-cli init
+Your Cobra application is ready at
+/Users/tillkuhn/git/hub/letitgo
+
+$ cobra-cli add serve
+serve created at /Users/tillkuhn/git/hub/letitgo
+$ cobra-cli add config
+$ cobra-cli add create -p 'configCmd'
+----
+
+TIP: You'll notice that this final command has a -p flag. This is used to assign a parent command to the newly added command.
+
 === Links
 * https://github.com/tillkuhn/gop/[]

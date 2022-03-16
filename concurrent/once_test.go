@@ -10,5 +10,4 @@ func TestMainFunc(t *testing.T) {
 	DoItOnceSam()
 	DoItOnceSam()
 	assert.Equal(t, 42, initNumber, "number should've been incremented exactly once")
-
 }
