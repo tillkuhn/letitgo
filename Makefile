@@ -49,3 +49,6 @@ job-queue: ## go run cmd/run/main.go
 prometheus: ## go run cmd/run/main.go
 	go run cmd/run/main.go prometheus
 
+
+serve: ## runs app in serve mode
+	go run main.go serve

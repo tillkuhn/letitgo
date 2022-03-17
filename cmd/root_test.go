@@ -2,17 +2,16 @@ package cmd
 
 import (
 	"bytes"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_ExecuteCommand(t *testing.T) {
 	cmd := rootCmd
 	b := bytes.NewBufferString("")
 	cmd.SetOut(b)
-	cmd.SetArgs([]string{"help", "config"})
+	cmd.SetArgs([]string{"help", "serve"})
 	err := cmd.Execute()
 	assert.NoError(t, err)
 	out, err := ioutil.ReadAll(b)

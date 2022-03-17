@@ -24,22 +24,36 @@ go get: added github.com/kelseyhightower/envconfig v1.4.0
 
 ---
 
-=== Cobra
+=== Cobra CLI
 
-https://github.com/spf13/cobra-cli/blob/main/README.md[source]
+* https://github.com/spf13/cobra-cli/blob/main/README.md[Official README]
+* https://towardsdatascience.com/how-to-create-a-cli-in-golang-with-cobra-d729641c7177[How to create a CLI in golang with cobra]
+* https://github.com/spf13/cobra/blob/master/user_guide.md#using-the-cobra-library[Using the Cobra Library]
 
 ----
-$ cobra-cli init
+$ go get -u github.com/spf13/cobra@latest
+$ cobra-cli init --author "Till Kuhn"
 Your Cobra application is ready at
 /Users/tillkuhn/git/hub/letitgo
 
+$ go run main.go
+A longer description that spans multiple lines and likely contains
 $ cobra-cli add serve
 serve created at /Users/tillkuhn/git/hub/letitgo
-$ cobra-cli add config
-$ cobra-cli add create -p 'configCmd'
+
+$ git status
+Untracked files:
+LICENSE
+cmd/root.go
+cmd/serve.go
+main.go
+
+$ go run main.go serve
+Running server
 ----
 
-TIP: You'll notice that this final command has a -p flag. This is used to assign a parent command to the newly added command.
 
 === Links
-* https://github.com/tillkuhn/gop/[]
+
+* https://github.com/tillkuhn/letitgo[Let it Go - My Personal Go Playground]
+* https://carlosvin.github.io/langs/en/posts/rest-service-go-vs-java/[Golang over Java for REST services]
