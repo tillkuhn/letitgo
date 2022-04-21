@@ -32,12 +32,14 @@ go get: added github.com/kelseyhightower/envconfig v1.4.0
 
 ----
 $ go get -u github.com/spf13/cobra@latest
+
 $ cobra-cli init --author "Till Kuhn"
 Your Cobra application is ready at
 /Users/tillkuhn/git/hub/letitgo
 
 $ go run main.go
 A longer description that spans multiple lines and likely contains
+
 $ cobra-cli add serve
 serve created at /Users/tillkuhn/git/hub/letitgo
 
