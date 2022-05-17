@@ -42,15 +42,19 @@ outdated: ## show outdated direct dependencies
 	go install github.com/psampaz/go-mod-outdated
 	go list -u -m -json all | go-mod-outdated -direct
 
-job-queue: ## go run cmd/run/main.go
-	go run cmd/run/main.go job-queue
-
-
-prometheus: ## go run cmd/run/main.go
-	go run cmd/run/main.go prometheus
-
-serve: ## runs app in serve mode
-	@go run main.go serve
-
+# Cobra Commands
 run: ## runs app w/o args (shows help)
 	@go run main.go
+
+job-queue: ## run app with job.queue command
+	go run cmd/run/main.go job-queue
+
+prometheus: ## run app with prometheus command
+	go run cmd/run/main.go prometheus
+
+serve: ## runs app with serve command
+	go run main.go serve
+
+.PHONY: sqlite
+sqlite: ## runs app with sqlite command
+	go run main.go sqlite
