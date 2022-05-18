@@ -8,10 +8,11 @@ import (
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 )
 
-// Run launches example based on https://www.codeproject.com/Articles/5261771/Golang-SQLite-Simple-Example
+// Run launches example based on
+// * https://www.codeproject.com/Articles/5261771/Golang-SQLite-Simple-Example
+// * https://antonz.org/json-virtual-columns/
 func Run() {
-	os.Remove("sqlite-database.db") // I delete the file to avoid duplicated records.
-	// SQLite is a file based database.
+	// os.Remove("sqlite-database.db") // obsolete since Create truncates if the file aready exists
 
 	log.Println("Creating sqlite-database.db...")
 	file, err := os.Create("sqlite-database.db") // Create SQLite file
