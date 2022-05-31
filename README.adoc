@@ -55,7 +55,19 @@ Running server
 ----
 
 
+=== Enums
+
+
+http://www.inanzzz.com/index.php/post/wqbs/a-basic-usage-of-int-and-string-enum-types-in-golang[A basic usage of int and string enum types in Golang]
+
+=== What is iota?
+
+iota is an identifier that is used with constant and which can simplify constant definitions that use auto-increment numbers. The iota keyword represents integer constant starting from zero.
+The iota keyword represents successive integer constants 0, 1, 2,….It resets to 0 whenever the word const appears in the source code, and increments after each const specification.
+https://levelup.gitconnected.com/implementing-enums-in-golang-9537c433d6e2[-- source]
+
 === Links
 
 * https://github.com/tillkuhn/letitgo[Let it Go - My Personal Go Playground]
 * https://carlosvin.github.io/langs/en/posts/rest-service-go-vs-java/[Golang over Java for REST services]
+

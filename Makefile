@@ -46,11 +46,11 @@ outdated: ## show outdated direct dependencies
 run: ## runs app w/o args (shows help)
 	@go run main.go
 
-job-queue: ## run app with job.queue command
-	go run cmd/run/main.go job-queue
+worker: ## run app with worker (job queue) command
+	go run main.go worker
 
 prometheus: ## run app with prometheus command
-	go run cmd/run/main.go prometheus
+	go run main.go prometheus
 
 serve: ## runs app with serve command
 	go run main.go serve

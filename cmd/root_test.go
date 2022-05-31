@@ -12,7 +12,7 @@ func Test_ExecuteCommand(t *testing.T) {
 	cmd := rootCmd
 	b := bytes.NewBufferString("")
 	cmd.SetOut(b)
-	cmd.SetArgs([]string{"help", "serve"})
+	cmd.SetArgs([]string{"help", "worker"})
 	err := cmd.Execute()
 	assert.NoError(t, err)
 	out, err := ioutil.ReadAll(b)

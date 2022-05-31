@@ -1,6 +1,7 @@
 // Package concurrent: JOB QUEUES IN GO
 // Constructs and snippets to build your job queue in Golang.
 // Good Article: https://www.opsdash.com/blog/job-queues-in-go.htm
+// Or similar: http://www.inanzzz.com/index.php/post/3hut/a-simple-worker-and-work-queue-example-with-golang
 package concurrent
 
 import (
