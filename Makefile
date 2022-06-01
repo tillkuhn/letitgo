@@ -46,6 +46,9 @@ outdated: ## show outdated direct dependencies
 run: ## runs app w/o args (shows help)
 	@go run main.go
 
+stack: ## run app with stack command (generics support)
+	go run main.go stack
+
 worker: ## run app with worker (job queue) command
 	go run main.go worker
 

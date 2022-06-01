@@ -6,7 +6,7 @@ package main
 
 import "tillkuhn/goplay/cmd"
 
+// main delegates to Cobra's Execute in cmd/root.go
 func main() {
-	// see cmd/root.go
 	cmd.Execute()
 }
