@@ -58,6 +58,10 @@ prometheus: ## run app with prometheus command
 serve: ## runs app with serve command
 	go run main.go serve
 
+.PHONY: signal
+signal: ## runs app with signal cmd (graceful http shutdown on sigterm)
+	go run main.go signal
+
 .PHONY: sqlite
 sqlite: ## runs app with sqlite command
 	go run main.go sqlite
