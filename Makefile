@@ -43,18 +43,23 @@ outdated: ## show outdated direct dependencies
 	go list -u -m -json all | go-mod-outdated -direct
 
 # Cobra Commands
+.PHONY: run
 run: ## runs app w/o args (shows help)
 	@go run main.go
 
+.PHONY: stack
 stack: ## run app with stack command (generics support)
 	go run main.go stack
 
+.PHONY: worker
 worker: ## run app with worker (job queue) command
 	go run main.go worker
 
+.PHONY: prometheus
 prometheus: ## run app with prometheus command
 	go run main.go prometheus
 
+.PHONY: serve
 serve: ## runs app with serve command
 	go run main.go serve
 

@@ -1,12 +1,9 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
+// Package cmd unleashes the cobra
 package cmd
 
 import (
 	"fmt"
-	"tillkuhn/goplay/concurrent"
+	"tillkuhn/goplay/worker"
 
 	"github.com/spf13/cobra"
 )
@@ -23,7 +20,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("worker called")
-		concurrent.DoWork()
+		worker.DoWork()
 	},
 }
 
