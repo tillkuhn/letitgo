@@ -2,6 +2,7 @@ package json
 
 import (
 	"encoding/json"
+	"strings"
 )
 
 func MarshalMap(key string, val string) ([]byte, error) {
@@ -13,4 +14,10 @@ func MarshalMap(key string, val string) ([]byte, error) {
 		return nil, err
 	}
 	return jsonBytes, err
+}
+
+func GenericUnmarshal[J any](jsonStr string) J {
+	var input2 J
+	_ = json.NewDecoder(strings.NewReader(jsonStr)).Decode(&input2)
+	return input2
 }

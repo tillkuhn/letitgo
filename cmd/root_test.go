@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ExecuteCommand(t *testing.T) {
+func TestExecuteCommand(t *testing.T) {
 	cmd := rootCmd
 	b := bytes.NewBufferString("")
 	cmd.SetOut(b)

@@ -4,20 +4,22 @@ package worker
 import (
 	"errors"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type PizzaJob struct {
-	Id  int
-	Seq int
+	Id      int
+	Seq     int
+	Topping string
 }
 
 var ids = []int{1, 32, 45, 667, 22}
 
 func TestWorker(t *testing.T) {
-	w := Worker[PizzaJob]{}
+	w := NewWorker[PizzaJob]()
 	w.Start(justDoingMyJob, len(ids))
 	for i, id := range ids {
 		res := w.TryEnqueue(PizzaJob{Seq: i, Id: id})

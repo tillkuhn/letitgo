@@ -2,6 +2,7 @@ package json
 
 import (
 	"testing"
+	"tillkuhn/goplay/types"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -11,4 +12,9 @@ func TestJsonMarshalMap(t *testing.T) {
 	bytes, err := MarshalMap("hase", "007")
 	assert.Equal(t, expect, string(bytes))
 	assert.Nil(t, err)
+}
+
+func TestMarshall(t *testing.T) {
+	v := GenericUnmarshal[types.Bike](`{"Brand": "Merida"}`)
+	assert.Equal(t, "Merida", v.Brand)
 }

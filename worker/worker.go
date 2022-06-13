@@ -2,9 +2,10 @@
 package worker
 
 import (
+	"sync"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"sync"
 )
 
 // Worker manages all bits and pieces
@@ -25,6 +26,11 @@ type Worker[T any] struct {
 	jobChan chan T
 	wg      sync.WaitGroup
 	logger  zerolog.Logger
+}
+
+// NewWorker factory method to return a typesafe worker
+func NewWorker[T any]() *Worker[T] {
+	return &Worker[T]{}
 }
 
 // Start employs a Worker goroutine attached to a buffered Job Queue
@@ -66,7 +72,7 @@ func (w *Worker[T]) TryEnqueue(job T) bool {
 	case w.jobChan <- job:
 		return true
 	default:
-		w.logger.Debug().Msgf("jobChan is full, cannot enqueue %v", job)
+		w.logger.Debug().Msgf("jobChan is full (%d), cannot enqueue %v", w.Capacity(), job)
 		return false
 	}
 }
