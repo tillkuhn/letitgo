@@ -5,9 +5,13 @@ type Rice int
 // Rice type int backed enum
 // The iota keyword represents successive integer constants 0, 1, 2,…
 // It resets to 0 whenever the word const appears in the source code, and increments after each const specification.
+//
+// "In a group-style constant declaration, except the first constant specification,
+// other constant specifications can be incomplete. An incomplete constant specification doesn't contain the = symbol."
 const (
 	Jasmin  Rice = iota // 0
 	Basmati             // 1
+	Patna               // 2
 )
 
 // String() will be returned when you call string(r) or printf("%s",r) etc.
@@ -15,7 +19,7 @@ const (
 // The fmt package (and many others) look for this interface to print values.
 func (r Rice) String() string {
 	// Typically, you would take the enum names, Str suffix just for illustration
-	rices := [...]string{"JasminStr", "BasmatiStr", "PlainStr"} // index must follow the order in const !!!
+	rices := [...]string{"JasminStr", "BasmatiStr", "PatnaStr"} // index must follow the order in const !!!
 	if len(rices) < int(r) {
 		return ""
 	}
@@ -38,7 +42,7 @@ type Extension string
 const (
 	Jpeg Extension = "JPG"
 	Png  Extension = "PNG"
-	// Gif            = "GIF" // do not omit extension SA9004: only the first constant in this group has an explicit type
+	Gif  Extension = "GIF" // do not omit extension SA9004: only the first constant in this group has an explicit type
 )
 
 //func (e Extension) String() string {
