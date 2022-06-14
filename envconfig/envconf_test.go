@@ -1,4 +1,4 @@
-package config
+package envconfig
 
 import (
 	"os"
@@ -14,7 +14,7 @@ func TestEnvConfig(t *testing.T) {
 		"T_MAX_ATTEMPTS": "42",
 		"T_BROKERS":      "localhost:44,localhost:55,localhost:66",
 		"T_COLOR_CODES":  "red:1,green:2,blue:3",
-		"T_API_KEY":      "777",
+		"T_SOME_KEY":     "777",
 	}
 	os.Clearenv()
 	for k, v := range e {
