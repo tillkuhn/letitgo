@@ -70,3 +70,12 @@ signal: ## runs app with signal cmd (graceful http shutdown on sigterm)
 .PHONY: sqlite
 sqlite: ## runs app with sqlite command
 	go run main.go sqlite
+
+.PHONY: oidc-client
+oidc-client: ## runs app with oidcclient command
+	go run main.go oidcclient --debug
+
+.PHONY: oidc-server
+oidc-server: ## run github.com/zitadel/oidc/example/server, serve http://localhost:9998/.well-known/openid-configuration
+	go run github.com/zitadel/oidc/example/server
+
