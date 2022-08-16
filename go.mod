@@ -1,6 +1,7 @@
 module tillkuhn/goplay
 
-go 1.18
+go 1.19
+
 
 require (
 	github.com/dustin/go-humanize v1.0.0
