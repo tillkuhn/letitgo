@@ -42,18 +42,18 @@ outdated: ## show outdated direct dependencies
 	go install github.com/psampaz/go-mod-outdated
 	go list -u -m -json all | go-mod-outdated -direct
 
-# Cobra Commands
+############ Aliases for Cobra Commands ############
 .PHONY: run
 run: ## runs app w/o args (shows help)
 	@go run main.go
 
-.PHONY: stack
-stack: ## run app with stack command (generics support)
-	go run main.go stack
+.PHONY: oidc-client
+oidc-client: ## runs app with oidcclient command
+	go run main.go oidcclient --debug
 
-.PHONY: worker
-worker: ## run app with worker (job queue) command
-	go run main.go worker
+.PHONY: oidc-server
+oidc-server: ## run github.com/zitadel/oidc/example/server, serve http://localhost:9998/.well-known/openid-configuration
+	go run github.com/zitadel/oidc/example/server
 
 .PHONY: prometheus
 prometheus: ## run app with prometheus command
@@ -71,11 +71,15 @@ signal: ## runs app with signal cmd (graceful http shutdown on sigterm)
 sqlite: ## runs app with sqlite command
 	go run main.go sqlite
 
-.PHONY: oidc-client
-oidc-client: ## runs app with oidcclient command
-	go run main.go oidcclient --debug
+.PHONY: stack
+stack: ## run app with stack command (generics support)
+	go run main.go stack
 
-.PHONY: oidc-server
-oidc-server: ## run github.com/zitadel/oidc/example/server, serve http://localhost:9998/.well-known/openid-configuration
-	go run github.com/zitadel/oidc/example/server
+.PHONY: ticker
+ticker: ## runs app with ticker command
+	go run main.go ticker
+
+.PHONY: worker
+worker: ## run app with worker (job queue) command
+	go run main.go worker
 

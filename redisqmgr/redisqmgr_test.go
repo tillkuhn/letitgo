@@ -3,12 +3,13 @@ package redisqmgr
 import (
 	"context"
 	"encoding/json"
-	"github.com/go-redis/redismock/v8"
-	"github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/go-redis/redismock/v8"
+	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
 )
 
 type ScanTask struct {

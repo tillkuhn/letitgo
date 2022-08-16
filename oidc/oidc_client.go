@@ -4,14 +4,15 @@ package oidc
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"github.com/sirupsen/logrus"
 	"github.com/zitadel/oidc/pkg/client/rp"
 	httpHelper "github.com/zitadel/oidc/pkg/http"
 	"github.com/zitadel/oidc/pkg/oidc"
-	"net/http"
-	"time"
 )
 
 var (

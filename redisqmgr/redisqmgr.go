@@ -5,14 +5,16 @@ import (
 	"encoding"
 	"encoding/json"
 	"fmt"
-	"github.com/go-redis/redis/v8"
-	"github.com/prometheus/client_golang/prometheus"
 	"os"
 	"sync"
 
+	"github.com/go-redis/redis/v8"
+	"github.com/prometheus/client_golang/prometheus"
+
+	"time"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"time"
 )
 
 // QueueMgr messaging queueing backed by https://github.com/go-redis/redis inspired by ...

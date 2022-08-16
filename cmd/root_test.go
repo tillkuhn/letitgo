@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,7 +15,7 @@ func TestExecuteCommand(t *testing.T) {
 	cmd.SetArgs([]string{"help", "worker"})
 	err := cmd.Execute()
 	assert.NoError(t, err)
-	out, err := ioutil.ReadAll(b)
+	out, err := io.ReadAll(b)
 	assert.NoError(t, err)
 	assert.Contains(t, string(out), "Cobra is a CLI library for Go that empowers applications.")
 }
