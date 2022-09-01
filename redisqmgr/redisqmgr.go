@@ -189,6 +189,12 @@ func (rq *QueueMgr) QueueWithNamespace(queueShort string) string {
 	}
 }
 
+// Ping can be used to test if the server is available
+func (rq *QueueMgr) Ping(ctx context.Context) error {
+	statusCmd := rq.redisClient.Ping(ctx)
+	return statusCmd.Err()
+}
+
 // WaitForListenerShutdown blocking, waits until the wait group is down to 0
 func (rq *QueueMgr) WaitForListenerShutdown() {
 	rq.logger.Debug().Msgf("Wait for all listeners to exit. In a hurry? kill pid %d 😃", os.Getpid())

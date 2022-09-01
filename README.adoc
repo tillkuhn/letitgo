@@ -47,7 +47,7 @@ A longer description that spans multiple lines and likely contains
 
 === Add Command
 
-.Example add 'serve' command
+.Example to add a 'serve' command
 ----
 $ cobra-cli add serve
 serve created at /Users/tillkuhn/git/hub/letitgo

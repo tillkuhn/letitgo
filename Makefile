@@ -47,6 +47,10 @@ outdated: ## show outdated direct dependencies
 run: ## runs app w/o args (shows help)
 	@go run main.go
 
+.PHONY: filesystem
+filesystem: ## runs app with filesystem command
+	go run main.go filesystem
+
 .PHONY: oidc-client
 oidc-client: ## runs app with oidcclient command
 	go run main.go oidcclient --debug

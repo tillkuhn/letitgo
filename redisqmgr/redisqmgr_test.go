@@ -1,15 +1,17 @@
 package redisqmgr
 
 import (
+	"github.com/go-redis/redismock/v8"
+	"github.com/stretchr/testify/assert"
+	"os"
+	"time"
+)
+
+import (
 	"context"
 	"encoding/json"
-	"os"
-	"testing"
-	"time"
-
-	"github.com/go-redis/redismock/v8"
 	"github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 type ScanTask struct {
@@ -20,10 +22,10 @@ func (st ScanTask) MarshalBinary() (data []byte, err error) {
 	return json.Marshal(st)
 }
 
-// TestRedisQueueRealInstance skipped in ci, expects a real redis instance
-// Todo check out https://github.com/go-redis/redismock
-func TestRedisQueueRealInstance(t *testing.T) {
-	if _, present := os.LookupEnv("CI_PROJECT_NAME"); present {
+// TestRedisQueueManager using  https://github.com/go-redis/redismock
+func TestRedisQueueManager(t *testing.T) {
+	// To disable testing in GitLab CI, use presence of CI_PROJECT_NAME
+	if _, present := os.LookupEnv("TROXY_SKIP_REDIS_TEST"); present {
 		t.Skip("Skipping testing in CI environment")
 	}
 	client, mock := redismock.NewClientMock()
@@ -40,12 +42,14 @@ func TestRedisQueueRealInstance(t *testing.T) {
 	task2m, err := task2.MarshalBinary()
 	assert.NoError(t, err)
 
+	mock.ExpectPing().SetVal("PONG")
 	mock.ExpectRPush(qFull, string(task1m)).SetVal(1)
 	mock.ExpectRPush(qFull, string(task2m)).SetVal(2) // returns list length after push
 	mock.ExpectBLPop(rq.listenerTimeout, qFull).SetVal([]string{qShort, string(task2m)})
 	mock.ExpectBLPop(rq.listenerTimeout, qFull).SetVal([]string{qShort, string(task1m)})
 
 	ctx, cancel := context.WithCancel(context.Background())
+	assert.NoError(t, rq.Ping(ctx))
 	err = rq.Push(ctx, qShort, task1)
 	assert.NoError(t, err)
 	assert.NoError(t, rq.Push(ctx, qShort, task2))
@@ -66,8 +70,8 @@ func TestRedisQueueRealInstance(t *testing.T) {
 }
 
 func TestQueueNameQualifiedAndWithoutNamespace(t *testing.T) {
-	rq := New(&ClientOpts{Namespace: "testa"})
-	assert.Equal(t, "testa.hase-klaus", rq.QueueWithNamespace("hase-klaus"))
+	rq := New(&ClientOpts{Namespace: "test"})
+	assert.Equal(t, "test.hase-klaus", rq.QueueWithNamespace("hase-klaus"))
 	rq = New(&ClientOpts{Namespace: ""})
 	assert.Equal(t, "hase-horst", rq.QueueWithNamespace("hase-horst"))
 }
