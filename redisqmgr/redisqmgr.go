@@ -101,27 +101,6 @@ func NewWithClient(client *redis.Client, opts *ClientOpts) *QueueMgr {
 	return &rq
 }
 
-// Push pushes data to the given "queue" synchronously
-// This is backed by a redis list value, see docs https://redis.io/commands/rpush/
-// RPush: "Insert all the specified values at the tail of the list stored at key.
-// If key does not exist, it is created as empty list before performing the push operation."
-// Events must implement binary Marshaller interface, so they can be serialized properly
-// RPush returns the length of the list after the push operation.
-func (rq *QueueMgr) Push(ctx context.Context, queueShort string, event encoding.BinaryMarshaler) error {
-	queue := rq.QueueWithNamespace(queueShort)
-	rq.logger.Info().Msgf("Pushing message to queue=%s", queue)
-	b, err := json.Marshal(event)
-	if err != nil {
-		return err
-	}
-	if err := rq.redisClient.RPush(ctx, queue, string(b)).Err(); err != nil {
-		rq.counterError.WithLabelValues(queueShort).Add(1)
-		return err
-	}
-	rq.logger.Info().Msgf("Push successful, queue=%s, qLen=%d", queue, rq.QueueLen(ctx, queueShort))
-	return nil
-}
-
 // StartQueueWorker listen on a queue represented by a Redis List Value
 // This method starts a go routine and returns immediately
 // It uses BLPop internally to read "Messages" with a small timeout, see https://redis.io/commands/blpop/
@@ -130,6 +109,7 @@ func (rq *QueueMgr) Push(ctx context.Context, queueShort string, event encoding.
 func (rq *QueueMgr) StartQueueWorker(ctx context.Context, queueShort string, callbackFunc func(string) error, pollInterval time.Duration) {
 	rq.listenerWG.Add(1)
 	go rq.queueWorker(ctx, queueShort, callbackFunc, pollInterval)
+	rq.logger.Debug().Msgf("New Queue worker started for queue=%s interval=%v", queueShort, pollInterval)
 }
 
 // queueWorker performs the actual, started by StartQueueWorker in a separate goroutine
@@ -168,6 +148,27 @@ func (rq *QueueMgr) queueWorker(ctx context.Context, queueShort string, callback
 			time.Sleep(pollInterval)
 		}
 	}
+}
+
+// Push pushes data to the given "queue" synchronously
+// This is backed by a redis list value, see docs https://redis.io/commands/rpush/
+// RPush: "Insert all the specified values at the tail of the list stored at key.
+// If key does not exist, it is created as empty list before performing the push operation."
+// Events must implement binary Marshaller interface, so they can be serialized properly
+// RPush returns the length of the list after the push operation.
+func (rq *QueueMgr) Push(ctx context.Context, queueShort string, event encoding.BinaryMarshaler) error {
+	queue := rq.QueueWithNamespace(queueShort)
+	rq.logger.Info().Msgf("Pushing message to queue=%s", queue)
+	b, err := json.Marshal(event)
+	if err != nil {
+		return err
+	}
+	if err := rq.redisClient.RPush(ctx, queue, string(b)).Err(); err != nil {
+		rq.counterError.WithLabelValues(queueShort).Add(1)
+		return err
+	}
+	rq.logger.Info().Msgf("Push successful, queue=%s, qLen=%d", queue, rq.QueueLen(ctx, queueShort))
+	return nil
 }
 
 // QueueLen Returns the number of list elements in the key identified by queue name, or zero if the key does not exist

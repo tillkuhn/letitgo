@@ -1,17 +1,16 @@
 package redisqmgr
 
 import (
-	"github.com/go-redis/redismock/v8"
-	"github.com/stretchr/testify/assert"
-	"os"
-	"time"
-)
-
-import (
 	"context"
 	"encoding/json"
-	"github.com/rs/zerolog/log"
+	"errors"
+	"os"
 	"testing"
+	"time"
+
+	"github.com/go-redis/redismock/v8"
+	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/assert"
 )
 
 type ScanTask struct {
@@ -34,6 +33,7 @@ func TestRedisQueueManager(t *testing.T) {
 	qFull := rq.QueueWithNamespace(qShort)
 	task1 := ScanTask{ScanId: 14928080}
 	task2 := ScanTask{ScanId: 47118080}
+	errorTask := ScanTask{ScanId: 99999}
 
 	// mock.ExpectGet(key).RedisNil()
 	// 	mock.Regexp().ExpectSet(key, `[a-z]+`, 30 * time.Minute).SetErr(errors.New("FAIL"))
@@ -41,10 +41,13 @@ func TestRedisQueueManager(t *testing.T) {
 	assert.NoError(t, err)
 	task2m, err := task2.MarshalBinary()
 	assert.NoError(t, err)
+	errorTaskM, err := errorTask.MarshalBinary()
+	assert.NoError(t, err)
 
 	mock.ExpectPing().SetVal("PONG")
 	mock.ExpectRPush(qFull, string(task1m)).SetVal(1)
 	mock.ExpectRPush(qFull, string(task2m)).SetVal(2) // returns list length after push
+	mock.ExpectRPush(qFull, string(errorTaskM)).SetErr(errors.New("an error a day keeps the DevOps away"))
 	mock.ExpectBLPop(rq.listenerTimeout, qFull).SetVal([]string{qShort, string(task2m)})
 	mock.ExpectBLPop(rq.listenerTimeout, qFull).SetVal([]string{qShort, string(task1m)})
 
@@ -53,6 +56,7 @@ func TestRedisQueueManager(t *testing.T) {
 	err = rq.Push(ctx, qShort, task1)
 	assert.NoError(t, err)
 	assert.NoError(t, rq.Push(ctx, qShort, task2))
+	assert.ErrorContains(t, rq.Push(ctx, qShort, errorTask), "an error a day ")
 
 	go rq.StartQueueWorker(ctx, qShort, func(s string) error {
 		assert.Contains(t, s, "8080") // all IDs contain 8080
