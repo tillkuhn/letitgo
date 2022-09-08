@@ -47,6 +47,11 @@ outdated: ## show outdated direct dependencies
 run: ## runs app w/o args (shows help)
 	@go run main.go
 
+.PHONY: charts
+charts: ## runs app with charts command
+	@echo Running http://localhost:8081
+	go run main.go charts
+
 .PHONY: filesystem
 filesystem: ## runs app with filesystem command
 	go run main.go filesystem

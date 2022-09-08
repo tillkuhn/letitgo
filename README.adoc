@@ -45,30 +45,39 @@ $ go run main.go
 A longer description that spans multiple lines and likely contains
 ----
 
-=== Add Command
+=== Add Cobra Command
 
-.Example to add a 'serve' command
+.Example to add a 'serve' command, this creates a file `cmd/server.go`
 ----
 $ cobra-cli add serve
 serve created at /Users/tillkuhn/git/hub/letitgo
 ----
 
+.Create a dedicated folder / package with at least one .go file for your experiments
 ----
-$ git status
-Untracked files:
-LICENSE
-cmd/root.go
-cmd/serve.go
-main.go
+$ mkdir charts && echo "package charts" >charts/charts.go
+printf "package charts\n\nfunc Run() {}" >charts/charts.go
 ----
 
-.main delegates to Cobra's Execute in cmd/root.go
+.Open ./cmd/<command>.go and call a public function from your new package
+----
+var chartsCmd = &cobra.Command{
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("charts called")
+		charts.Run() // Delegate to package function (1st entry point)
+  // (...)
+----
+
+.`main()` in `main.go` delegates to Cobra's `Execute()` function in `cmd/root.go`
 ----
 $ cat main.go
 func main() {
 	cmd.Execute()
 }
+----
 
+.Run your new command For frequently used command, create a dedicated target in `Makefile`
+----
 $ go run main.go serve
 Running server
 ----
