@@ -38,6 +38,10 @@ imports: ## goimports -w -l .
 lint: imports ## golangci-lint run (./... is implicit, also implies target imports)
 	golangci-lint run
 
+.PHONY: update
+update: ## update go dependencies
+	go get -u
+
 # https://github.com/psampaz/go-mod-outdated
 outdated: ## show outdated direct dependencies
 	go install github.com/psampaz/go-mod-outdated
