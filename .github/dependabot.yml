@@ -12,3 +12,4 @@ updates:
     # Add assignees
     assignees:
       - "tillkuhn"
+     open-pull-requests-limit: 3
