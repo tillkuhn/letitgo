@@ -6,7 +6,7 @@ help: ## this help
 	awk 'BEGIN {FS = ":.*?## ";{print "[%header,cols=\"1,2\"]\n|===\n| TARGET | DESCRIPTION"}}; {printf "| \033[36m%-30s\033[0m | %s\n", $$1, $$2}; END {print "|==="}'
 
 usage: ## calls app with -h to show envconfig args
-	go run *.go -h
+	go run main.go -h
 
 clean: ## cleanup dist/ folder
 	rm -rf dist/
@@ -23,18 +23,19 @@ image: build ## local docker build
 # and https://stackoverflow.com/questions/33444968/how-to-get-all-packages-code-coverage-together-in-go
 # if you don't want to rely on external gotest tool with colors etc., simple replace gotest with this line:
 # go test -v -coverpkg=./... -coverprofile=coverage.out ./...
-test: ## run tests with coverage report
+test-all: ## run all tests (including long ones) with coverage report
 	go install github.com/rakyll/gotest@v0.0.6
 	gotest -v -coverpkg=./... -coverprofile=coverage.out ./...
 	@go tool cover -func coverage.out | grep "total:"
 	go tool cover -html=coverage.out -o coverage.html
 
-format: ## goimports -w -l .
+test: ## run short tests
+	go test -short ./...
+
+imports: ## goimports -w -l .
 	goimports -w -l .
 
-fmt: format  ## alias for format
-
-lint: format ## golangci-lint run (./... is implicit)
+lint: imports ## golangci-lint run (./... is implicit, also implies target imports)
 	golangci-lint run
 
 # https://github.com/psampaz/go-mod-outdated
