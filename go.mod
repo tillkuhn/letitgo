@@ -17,8 +17,8 @@ require (
 	github.com/segmentio/kafka-go v0.4.32
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.4.0
-	github.com/stretchr/testify v1.7.4
-	github.com/zitadel/oidc v1.5.1
+	github.com/stretchr/testify v1.8.0
+	github.com/zitadel/oidc v1.8.0
 )
 
 require (
@@ -39,7 +39,7 @@ require (
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e // indirect
-	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
+	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f // indirect
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
