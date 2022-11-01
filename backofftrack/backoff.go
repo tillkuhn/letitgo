@@ -2,9 +2,10 @@ package backofftrack
 
 import (
 	"fmt"
-	"github.com/jpillora/backoff"
 	"net"
 	"time"
+
+	"github.com/jpillora/backoff"
 )
 
 var (
