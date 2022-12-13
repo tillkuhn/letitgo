@@ -53,9 +53,15 @@ run: ## runs app w/o args (shows help)
 	@go run main.go
 
 .PHONY: charts
+db: ## runs app with db command
+	PGHOST=$(shell cat ~/.secret/cockroachdb/horsthost) PGDATABASE="horstdb" PGUSER="horst" \
+	PGPASSWORD=$(shell cat ~/.secret/cockroachdb/horst) PGPORT="26257" \
+	go run main.go db
+
+.PHONY: db
 charts: ## runs app with charts command
 	@echo Running http://localhost:8081
-	go run main.go charts
+	go run main.go db
 
 .PHONY: filesystem
 filesystem: ## runs app with filesystem command
