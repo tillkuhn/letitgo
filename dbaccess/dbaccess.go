@@ -3,11 +3,13 @@ package dbaccess
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"os"
+	"strings"
+
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
-	"log"
-	"os"
 )
 
 func Run() {
@@ -28,16 +30,18 @@ func connect() error {
 		os.Getenv("PGHOST"), os.Getenv("PGPORT"),
 		os.Getenv("PGDATABASE"),
 	)
-	fmt.Println(connStr)
+	fmt.Printf("Connected to %s\n", strings.ReplaceAll(connStr, os.Getenv("PGPASSWORD"), "*****"))
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return err
 	}
+
+	// called when function exits
 	defer func(db *sql.DB) {
 		if err := db.Close(); err != nil {
 			fmt.Println(err.Error())
 		}
-		fmt.Println("The database is disconnected, goodbye")
+		fmt.Println("The database has been successfully disconnected, goodbye!")
 	}(db)
 	if err = db.Ping(); err != nil {
 		return err
@@ -49,7 +53,9 @@ func connect() error {
 	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS quotes(quote text,tags text[])"); err != nil {
 		return errors.Wrap(err, "create db")
 	}
-	rows, err := db.Query(`SELECT "quote","tags" FROM quotes`)
+	table := "quotes"
+	fmt.Printf("Querying table %s\n", table)
+	rows, err := db.Query(`SELECT "quote","tags" FROM ` + table)
 	if err != nil {
 		return errors.Wrap(err, "query db")
 	}
@@ -63,7 +69,7 @@ func connect() error {
 		if err = rows.Scan(&quote, pq.Array(&tags)); err != nil {
 			return err
 		}
-		fmt.Printf("Quote: %s tags: %v\n", quote, tags)
+		fmt.Printf("Quote #%d: %s tags: %v\n", count, quote, tags)
 	}
 	if count < 1 {
 		if _, err := db.Exec(`INSERT INTO quotes(quote, tags) VALUES ('Be yourself; everyone else is already taken.', '{classic}')`); err != nil {
