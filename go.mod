@@ -3,7 +3,7 @@ module tillkuhn/goplay
 go 1.19
 
 require (
-	github.com/dustin/go-humanize v1.0.0
+	github.com/dustin/go-humanize v1.0.1
 	github.com/go-echarts/go-echarts/v2 v2.2.4
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-redis/redismock/v8 v8.11.5
