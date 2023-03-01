@@ -20,7 +20,7 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.2
-	github.com/zitadel/oidc v1.12.1
+	github.com/zitadel/oidc v1.13.0
 )
 
 require (
