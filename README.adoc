@@ -1,4 +1,4 @@
-= 🥶 Let it Go - My Personal Go Playground
+= 🥶 Let it Go - My Personal Go Playground :vulcan_salute:
 
 == Get started
 
