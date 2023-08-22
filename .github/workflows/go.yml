@@ -8,6 +8,8 @@ on:
 
 jobs:
 
+  # check https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/
+  # GitHub Actions: Skip pull request and push workflows with [skip ci]
   build:
     runs-on: ubuntu-latest
     steps:
