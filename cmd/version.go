@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -21,8 +22,9 @@ var versionCmd = &cobra.Command{
 	Long: `Display Git Information such as CommitHash
 and Build date.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("version called")
+		fmt.Println("Version Info:")
 		fmt.Printf("tag=%s hash=%s last_commit=%s build_date=%s\n", CommitTag, CommitHash, CommitDate, BuildDate)
+		fmt.Printf("GOOS=%s GOOARCH=%s\n", runtime.GOOS, runtime.GOARCH)
 	},
 }
 
