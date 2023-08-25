@@ -9,7 +9,15 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-    # Add assignees
     assignees:
       - "tillkuhn"
      open-pull-requests-limit: 3
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    assignees:
+      - "tillkuhn"
+      open-pull-requests-limit: 3        
