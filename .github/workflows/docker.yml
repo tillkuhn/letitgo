@@ -22,7 +22,7 @@ on:
       - v*
 
 jobs:
-  publish-hello-docker-image:
+  publish-docker-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,16 +51,19 @@ jobs:
           echo "git_commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
           echo "git_commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
           echo "git_commit_date=$(git show -s --format=%ci)"            >> $GITHUB_ENV
+          echo "build_date=$(date +'%Y-%m-%dT%H:%M:%S')"          >> $GITHUB_ENV
 
+      # for multi platforms check https://docs.docker.com/build/ci/github-actions/multi-platform/
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.1.1
         with:
           context: .
           push: true
-          #platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64  # linux/arm/v7
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             commit_hash=${{ env.git_commit_hash }}
             commit_date=${{ env.git_commit_date }}
             commit_tag=${{ env.git_commit_tag }}
+            build_date=${{ env.build_date }}
