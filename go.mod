@@ -1,4 +1,4 @@
-module tillkuhn/goplay
+module github.com/tillkuhn/letitgo
 
 go 1.19
 

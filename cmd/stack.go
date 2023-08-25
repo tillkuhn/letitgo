@@ -1,12 +1,11 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
-	"tillkuhn/goplay/concurrent"
+	"github.com/tillkuhn/letitgo/concurrent"
 
 	"github.com/spf13/cobra"
 )

@@ -1,17 +1,35 @@
 # syntax=docker/dockerfile:1
-# https://docs.docker.com/language/golang/build-images/
 # Build the application from source
+# https://docs.docker.com/language/golang/build-images/
+# Document setting ldflags to embed version into docker image / go binary
+# https://github.com/ko-build/ko/issues/167
+
 FROM golang:1.20 AS build-stage
+
+# Build arguments for this image (to be used in ldflags)
+ARG commit_hash=""
+ARG commit_date=""
+ARG commit_tag=""
+ARG build_date=""
 
 WORKDIR /app
 
+# use .dockerignore so .idea,.git etc. won't be pushed to the build context
 COPY . .
-#COPY go.mod go.sum ./
 RUN go mod download
 
-#COPY *.go ./
-
-RUN CGO_ENABLED=0 GOOS=linux go build -o /ltg
+# go build -ldflags="-help"
+# -X definition    add string value definition of the form importpath.name=value
+# https://programmingpercy.tech/blog/modify-variables-during-build/
+# CAUTION: make sure the import-path matches the module name in go.mod for -X
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath \
+    -ldflags="-w -s \
+    -X 'github.com/tillkuhn/letitgo/cmd.CommitHash=${commit_hash}' \
+    -X 'github.com/tillkuhn/letitgo/cmd.CommitDate=${commit_date}' \
+    -X 'github.com/tillkuhn/letitgo/cmd.CommitTag=${commit_tag}' \
+    -X 'github.com/tillkuhn/letitgo/cmd.BuildDate=${build_date}' \
+    -extldflags '-static'" \
+    -a -o /ltg
 
 # Run the tests in the container
 FROM build-stage AS run-test-stage

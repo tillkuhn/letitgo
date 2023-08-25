@@ -3,7 +3,7 @@ package cmd
 
 import (
 	"fmt"
-	"tillkuhn/goplay/worker"
+	"github.com/tillkuhn/letitgo/worker"
 
 	"github.com/spf13/cobra"
 )

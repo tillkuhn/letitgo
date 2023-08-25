@@ -1,5 +1,14 @@
-# https://dev.to/github/publishing-a-docker-image-to-githubs-container-repository-4n50
+
+# Publishing images to GitHub Packages
 # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-github-packages
+# How to Publish a Docker Image to GitHub's Container Registry
+
+# Sample workflow / Dockerfile setup for passing variables to build context (and the final binary)
+# https://github.com/SchrodingersGat/InvenTree/blob/c34b7802b8d08f4165371f9479548dc0024f5042/.github/workflows/docker.yaml
+
+
+# Get the current pushed tag in Github Actions
+# https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
 
 name: Publish
 
@@ -36,10 +45,22 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+      - name: Store Git info in Environment
+        run: |
+          # tag can be extracted from GITHUB_REF which contains the checked out ref, e.g. refs/tags/v1.2.3
+          echo "git_commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
+          echo "git_commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+          echo "git_commit_date=$(git show -s --format=%ci)"            >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.1.1
         with:
           context: .
           push: true
+          #platforms: linux/amd64,linux/arm64,linux/arm/v7
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            commit_hash=${{ env.git_commit_hash }}
+            commit_date=${{ env.git_commit_date }}
+            commit_tag=${{ env.git_commit_tag }}

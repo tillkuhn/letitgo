@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"tillkuhn/goplay/dbaccess"
+	"github.com/tillkuhn/letitgo/dbaccess"
 
 	"github.com/spf13/cobra"
 )

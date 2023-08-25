@@ -45,7 +45,7 @@ $ go run main.go
 A longer description that spans multiple lines and likely contains
 ----
 
-=== Add Cobra Command
+=== Add a Cobra Command
 
 .Example to add a 'serve' command, this creates a file `cmd/server.go`
 ----
@@ -81,16 +81,6 @@ func main() {
 $ go run main.go serve
 Running server
 ----
-
-=== Enums
-
-http://www.inanzzz.com/index.php/post/wqbs/a-basic-usage-of-int-and-string-enum-types-in-golang[A basic usage of int and string enum types in Golang]
-
-=== What is iota?
-
-iota is an identifier that is used with constant and which can simplify constant definitions that use auto-increment numbers. The iota keyword represents integer constant starting from zero.
-The iota keyword represents successive integer constants 0, 1, 2,….It resets to 0 whenever the word const appears in the source code, and increments after each const specification.
-https://levelup.gitconnected.com/implementing-enums-in-golang-9537c433d6e2[-- source]
 
 === Links
 

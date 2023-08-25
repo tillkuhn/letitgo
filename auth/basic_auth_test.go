@@ -1,12 +1,12 @@
 package auth
 
 import (
+	"github.com/tillkuhn/letitgo/shared/ioutil"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"tillkuhn/goplay/shared/ioutil"
 
 	"github.com/stretchr/testify/assert"
 )

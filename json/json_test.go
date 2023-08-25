@@ -1,8 +1,8 @@
 package json
 
 import (
+	"github.com/tillkuhn/letitgo/types"
 	"testing"
-	"tillkuhn/goplay/types"
 
 	"github.com/stretchr/testify/assert"
 )

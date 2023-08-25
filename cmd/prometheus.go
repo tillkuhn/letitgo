@@ -1,12 +1,11 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
-	"tillkuhn/goplay/monitor"
+	"github.com/tillkuhn/letitgo/monitor"
 
 	"github.com/spf13/cobra"
 )

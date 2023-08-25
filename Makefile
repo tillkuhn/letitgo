@@ -1,5 +1,6 @@
 .ONESHELL:
 .PHONY: help usage clean build image test format fmt lint outdated run
+APPLICATION_NAME=ltg
 
 help: ## this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -11,13 +12,22 @@ usage: ## calls app with -h to show envconfig args
 clean: ## cleanup dist/ folder
 	rm -rf dist/
 
+# GOOS=linux
+# CAUTION: make sure the import-path matches the module name in go.mod for -X
 build: ## build in dist/app
 	mkdir -p dist
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-extldflags '-static'" -o ./dist/app
+	GOARCH=amd64 CGO_ENABLED=0 go build -ldflags \
+	"-X 'github.com/tillkuhn/letitgo/cmd.CommitTag=$(shell git describe --tags --abbrev=0)' -X 'github.com/tillkuhn/letitgo/cmd.CommitHash=$(shell git rev-parse --short HEAD)' -X 'github.com/tillkuhn/letitgo/cmd.BuildDate=$(shell date +'%Y-%m-%dT%H:%M:%S')' -extldflags '-static'" \
+	 -a -o ./dist/app
 
-image: build ## local docker build
-	docker build -t $(APPLICATION_NAME) .
-	docker images|grep $(APPLICATION_NAME)
+docker: ## local build with docker multistage
+	docker build \
+	--build-arg commit_hash=$(shell git rev-parse --short HEAD) \
+	--build-arg commit_date="$(shell git show -s --format=%ci)" \
+	--build-arg commit_tag="$(shell git describe --tags --abbrev=0)" \
+	--build-arg build_date="$(shell date +'%Y-%m-%dT%H:%M:%S')" \
+	-t $(APPLICATION_NAME) .
+	docker images | grep $(APPLICATION_NAME)
 
 # read https://blog.seriesci.com/how-to-measure-code-coverage-in-go/ for total coverage
 # and https://stackoverflow.com/questions/33444968/how-to-get-all-packages-code-coverage-together-in-go
@@ -102,4 +112,8 @@ ticker: ## runs app with ticker command
 .PHONY: worker
 worker: ## run app with worker (job queue) command
 	go run main.go worker
+
+.PHONY: version
+version: ## run app with version command
+	go run main.go version
 

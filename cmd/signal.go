@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"tillkuhn/goplay/signal"
+	"github.com/tillkuhn/letitgo/signal"
 
 	"github.com/spf13/cobra"
 )

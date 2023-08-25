@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"tillkuhn/goplay/charts"
+	"github.com/tillkuhn/letitgo/charts"
 
 	"github.com/spf13/cobra"
 )

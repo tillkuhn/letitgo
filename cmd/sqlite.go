@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"tillkuhn/goplay/sqlite"
+	"github.com/tillkuhn/letitgo/sqlite"
 
 	"github.com/spf13/cobra"
 )
