@@ -24,6 +24,7 @@ RUN go mod download
 # CAUTION: make sure the import-path matches the module name in go.mod for -X
 # we don't specify GOOS=linux GOARCH=amd64 here and this will interfe
 # with docker-build-push action multi platform build!
+#
 RUN CGO_ENABLED=0 go build -trimpath \
     -ldflags="-w -s \
     -X 'github.com/tillkuhn/letitgo/cmd.CommitHash=${commit_hash}' \
