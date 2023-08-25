@@ -48,9 +48,9 @@ jobs:
       - name: Store Git info in Environment
         run: |
           # tag can be extracted from GITHUB_REF which contains the checked out ref, e.g. refs/tags/v1.2.3
-          echo "git_commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
-          echo "git_commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
-          echo "git_commit_date=$(git show -s --format=%ci)"            >> $GITHUB_ENV
+          echo "commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
+          echo "commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+          echo "commit_date=$(git show -s --format=%ci)"            >> $GITHUB_ENV
           echo "build_date=$(date +'%Y-%m-%dT%H:%M:%S')"          >> $GITHUB_ENV
 
       - name: Run GoReleaser for binaries (w/o docker)
@@ -88,7 +88,7 @@ jobs:
           # https://github.com/docker/build-push-action/issues/820
           provenance: false
           build-args: |
-            commit_hash=${{ env.git_commit_hash }}
-            commit_date=${{ env.git_commit_date }}
-            commit_tag=${{ env.git_commit_tag }}
+            commit_hash=${{ env.commit_hash }}
+            commit_date=${{ env.commit_date }}
+            commit_tag=${{ env.commit_tag }}
             build_date=${{ env.build_date }}
