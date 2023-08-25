@@ -22,7 +22,9 @@ RUN go mod download
 # -X definition    add string value definition of the form importpath.name=value
 # https://programmingpercy.tech/blog/modify-variables-during-build/
 # CAUTION: make sure the import-path matches the module name in go.mod for -X
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath \
+# we don't specify GOOS=linux GOARCH=amd64 here and this will interfe
+# with docker-build-push action multi platform build!
+RUN CGO_ENABLED=0 go build -trimpath \
     -ldflags="-w -s \
     -X 'github.com/tillkuhn/letitgo/cmd.CommitHash=${commit_hash}' \
     -X 'github.com/tillkuhn/letitgo/cmd.CommitDate=${commit_date}' \

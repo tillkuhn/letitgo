@@ -56,15 +56,17 @@ jobs:
       - name: Set up Docker Buildx for Multiple platform builds
         uses: docker/setup-buildx-action@v2.9.1
 
-      # for multi platforms check https://docs.docker.com/build/ci/github-actions/multi-platform/
+      # * for multi platforms
+      # https://docs.docker.com/build/ci/github-actions/multi-platform/
+      # https://actuated.dev/blog/multi-arch-docker-github-actions
+      # CAUTION: platform: (...) requires docker/setup-buildx-action or you get
+      # ERROR: Multiple platforms feature is currently not supported for docker driver. (...)
+      # https://github.com/docker/build-push-action/issues/302
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.1.1
         with:
           context: .
           push: true
-          # CAUTION: platform: (...) requires docker/setup-buildx-action or you get
-          # ERROR: Multiple platforms feature is currently not supported for docker driver. (...)
-          # https://github.com/docker/build-push-action/issues/302
           platforms: linux/amd64,linux/arm64  # linux/arm/v7
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
