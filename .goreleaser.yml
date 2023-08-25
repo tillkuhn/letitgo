@@ -19,7 +19,7 @@ builds:
     ldflags:
       # https://goreleaser.com/customization/env/
       # Environment variables for ldflags are exported in .github/workflows/release.yaml
-      - -s -w -X 'github.com/tillkuhn/letitgo/cmd.CommitHash={{.Env.commit_hash}}' -X 'github.com/tillkuhn/letitgo/cmd.CommitDate={{.Env.commit_date}}' -X 'github.com/tillkuhn/letitgo/cmd.CommitTag={{.Env.commit_tag}}' -X 'github.com/tillkuhn/letitgo/cmd.BuildDate={{.Env.build_date}}' \
+      - -s -w -X 'github.com/tillkuhn/letitgo/cmd.CommitHash={{.Env.commit_hash}}' -X 'github.com/tillkuhn/letitgo/cmd.CommitDate={{.Env.commit_date}}' -X 'github.com/tillkuhn/letitgo/cmd.CommitTag={{.Env.commit_tag}}' -X 'github.com/tillkuhn/letitgo/cmd.BuildDate={{.Env.build_date}}'
 archives:
   - format: zip
     files:

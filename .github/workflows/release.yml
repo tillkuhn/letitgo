@@ -58,7 +58,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --rm-dist
+          args: release --clean # --rm-dist is deprecated
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
