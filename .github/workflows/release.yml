@@ -25,8 +25,8 @@ jobs:
   publish-docker-image:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write  # for go-releaser
+      packages: write  # for ghcr push
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
