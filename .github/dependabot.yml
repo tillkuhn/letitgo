@@ -20,4 +20,4 @@ updates:
       interval: "monthly"
     assignees:
       - "tillkuhn"
-      open-pull-requests-limit: 3        
+      open-pull-requests-limit: 3
