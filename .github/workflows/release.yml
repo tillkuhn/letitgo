@@ -13,7 +13,7 @@ name: Publish
 
 env:
   REGISTRY: ghcr.io  # Must be set to ghcr.io.
-  REGISTRY_IMAGE: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository }}
 
 on:
   push:
@@ -69,11 +69,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.REGISTRY_IMAGE }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Store Git info in Environment for docker build args (essentially the same args as for go-releaser)
         run: |
-          echo "REGISTRY: ${{ env.REGISTRY }} REGISTRY_IMAGE: ${{ env.REGISTRY_IMAGE }}"
+          echo "REGISTRY: ${{ env.REGISTRY }} IMAGE_NAME: ${{ env.IMAGE_NAME }}"
           # tag can be extracted from GITHUB_REF which contains the checked out ref, e.g. refs/tags/v1.2.3
           echo "commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
           echo "commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
@@ -127,7 +127,7 @@ jobs:
             commit_date=${{ env.commit_date }}
             commit_tag=${{ env.commit_tag }}
             build_date=${{ env.build_date }}
-          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
       -
         name: Export digest
         run: |
@@ -164,20 +164,21 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY_IMAGE }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       -
-        name: Login to Docker Hub
+        name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
       -
         name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}          
+          docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}          
