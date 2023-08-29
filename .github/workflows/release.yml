@@ -1,11 +1,10 @@
-
 # Publishing images to GitHub Packages
+#
 # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-github-packages
 # How to Publish a Docker Image to GitHub's Container Registry
 
 # Sample workflow / Dockerfile setup for passing variables to build context (and the final binary)
 # https://github.com/SchrodingersGat/InvenTree/blob/c34b7802b8d08f4165371f9479548dc0024f5042/.github/workflows/docker.yaml
-
 
 # Get the current pushed tag in GitHub Actions
 # https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
@@ -14,7 +13,7 @@ name: Publish
 
 env:
   REGISTRY: ghcr.io  # Must be set to ghcr.io.
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY_IMAGE: ${{ github.repository }}
 
 on:
   push:
@@ -24,6 +23,7 @@ on:
 jobs:
 
   go-releaser:
+    name: Release go binaries
     runs-on: ubuntu-latest
     # if: startsWith(github.ref, 'refs/tags/') # to disable goreleaser job  temporarily
     permissions:
@@ -51,6 +51,7 @@ jobs:
 
 
   ghcr-releaser:
+    name: Release container images
     runs-on: ubuntu-latest
     permissions:
       packages: write  # for ghcr push
@@ -68,7 +69,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.REGISTRY_IMAGE }}
 
       - name: Store Git info in Environment for docker build args (essentially the same args as for go-releaser)
         run: |
@@ -79,14 +80,14 @@ jobs:
           echo "build_date=$(date +'%Y-%m-%dT%H:%M:%S')"          >> $GITHUB_ENV
 
       # https://docs.docker.com/build/ci/github-actions/multi-platform/
-      - name: Set up QEMU
+      -
+        name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx for Multiple platform builds
+      -
+        name: Set up Docker Buildx for Multiple platform builds
         uses: docker/setup-buildx-action@v2.9.1
-
-
-      - name: Login to GitHub Container Registry
+      -
+        name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
@@ -105,8 +106,9 @@ jobs:
       #
       # How to get supported platforms for docker image with docker?
       # https://piraces.dev/short-bits/docker-list-supported-platforms-image/
-      # docker run --rm mplatform/mquery <my-image>:<my-tag>
-      - name: Build and push Docker image
+      # docker manifest inspect <my-image>:<my-tag>
+      -
+        name: Build and push Docker image
         uses: docker/build-push-action@v4.1.1
         with:
           context: .
@@ -122,3 +124,55 @@ jobs:
             commit_date=${{ env.commit_date }}
             commit_tag=${{ env.commit_tag }}
             build_date=${{ env.build_date }}
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+      -
+        name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+      -
+        name: Upload digest
+        uses: actions/upload-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      -
+        name: Download digests
+        uses: actions/download-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+      -
+        name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}          
