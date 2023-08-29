@@ -7,7 +7,7 @@
 # https://github.com/SchrodingersGat/InvenTree/blob/c34b7802b8d08f4165371f9479548dc0024f5042/.github/workflows/docker.yaml
 
 
-# Get the current pushed tag in Github Actions
+# Get the current pushed tag in GitHub Actions
 # https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
 
 name: Publish
@@ -22,30 +22,16 @@ on:
       - v*
 
 jobs:
-  publish-docker-image:
+
+  go-releaser:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # for go-releaser
-      packages: write  # for ghcr push
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2.2.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          #  You can use the ${{ github.actor }} context to automatically use the username of the user that triggered the workflow run.
-          username: ${{ github.actor }}
-          # You can use the automatically-generated GITHUB_TOKEN secret for the password
-          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4.6.0
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Store Git info in Environment
+      - name: Store Git info in Environment for goreleaser
         run: |
           # tag can be extracted from GITHUB_REF which contains the checked out ref, e.g. refs/tags/v1.2.3
           echo "commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
@@ -62,14 +48,57 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
+  ghcr-releaser:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write  # for ghcr push
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Store Git info in Environment for docker build args (essentially the same args as for go-releaser)
+        run: |
+          # tag can be extracted from GITHUB_REF which contains the checked out ref, e.g. refs/tags/v1.2.3
+          echo "commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
+          echo "commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+          echo "commit_date=$(git show -s --format=%ci)"            >> $GITHUB_ENV
+          echo "build_date=$(date +'%Y-%m-%dT%H:%M:%S')"          >> $GITHUB_ENV
+
+      # https://docs.docker.com/build/ci/github-actions/multi-platform/
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx for Multiple platform builds
         uses: docker/setup-buildx-action@v2.9.1
 
-      # Tips for multi platform builds
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          #  You can use the ${{ github.actor }} context to automatically use the username of the user that triggered the workflow run.
+          username: ${{ github.actor }}
+          # You can use the automatically-generated GITHUB_TOKEN secret for the password
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Tips for multi-platform builds
       # https://docs.docker.com/build/ci/github-actions/multi-platform/
       # https://actuated.dev/blog/multi-arch-docker-github-actions
       #
-      # CAUTION: platform: (...) requires docker/setup-buildx-action or you get
+      # CAUTION: platform: (...) requires docker/setup-buildx-action, or you get
       # ERROR: Multiple platforms feature is currently not supported for docker driver. (...)
       # https://github.com/docker/build-push-action/issues/302
       #
@@ -81,7 +110,7 @@ jobs:
         with:
           context: .
           push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           # See GitHub Action produces unknown architecture and OS
