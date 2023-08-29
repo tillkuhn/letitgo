@@ -21,7 +21,9 @@ jobs:
         go-version: 1.20
 
     - name: Build
-      run: go build -v ./...
+      run: |
+        echo "Ref: ${GITHUB_REF#refs/*/}"
+        go build -v ./...
 
     - name: Test
       run: go test -v ./...
