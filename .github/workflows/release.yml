@@ -73,6 +73,7 @@ jobs:
 
       - name: Store Git info in Environment for docker build args (essentially the same args as for go-releaser)
         run: |
+          echo "REGISTRY: ${{ env.REGISTRY }} REGISTRY_IMAGE: ${{ env.REGISTRY_IMAGE }}"
           # tag can be extracted from GITHUB_REF which contains the checked out ref, e.g. refs/tags/v1.2.3
           echo "commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
           echo "commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
@@ -141,10 +142,12 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  # https://docs.docker.com/build/ci/github-actions/multi-platform/
+  # https://github.com/docker/build-push-action/issues/846
   merge:
     runs-on: ubuntu-latest
     needs:
-      - build
+      - ghcr-releaser
     steps:
       -
         name: Download digests
