@@ -25,6 +25,7 @@ jobs:
 
   go-releaser:
     runs-on: ubuntu-latest
+    # if: startsWith(github.ref, 'refs/tags/') # to disable goreleaser job  temporarily
     permissions:
       contents: write  # for go-releaser
     steps:
