@@ -9,6 +9,9 @@
 # Get the current pushed tag in GitHub Actions
 # https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
 
+# Good: Automate Docker Image Builds and Push to GitHub Registry Using GitHub Actions 🐙
+# https://dev.to/ken_mwaura1/automate-docker-image-builds-and-push-to-github-registry-using-github-actions-4h20
+
 name: Publish
 
 env:
