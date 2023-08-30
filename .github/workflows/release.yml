@@ -134,6 +134,9 @@ jobs:
             commit_hash=${{ env.commit_hash }}
             commit_date=${{ env.commit_date }}
             build_date=${{ env.build_date }}
+          # https://docs.docker.com/build/cache/backends/gha/ GitHub Actions cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
       -
         name: Export image digest
