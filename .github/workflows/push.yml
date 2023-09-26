@@ -19,6 +19,12 @@ jobs:
         platform: [ubuntu-latest]
     runs-on: ${{matrix.platform}}
     steps:
+      # test hcp secrets integration
+      - shell: bash
+        env:
+          HI: ${{ secrets.HELLO }}
+        run: |
+          echo "$HI (it's not really a secret)"    
       - name: Set up Go ${{matrix.go-version}}
         uses: actions/setup-go@v3
         with:
