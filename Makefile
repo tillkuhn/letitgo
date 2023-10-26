@@ -1,6 +1,8 @@
 .ONESHELL:
 .PHONY: help usage clean build image test format fmt lint outdated run
 APPLICATION_NAME=ltg
+# unified sed command, use like $(SED) -i -e 's/Id/ID/' some-file.txt
+SED?=$(shell command -v gsed || command -v sed)
 
 help: ## this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
