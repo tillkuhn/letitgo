@@ -18,7 +18,7 @@ require (
 	github.com/rs/zerolog v1.30.0
 	github.com/segmentio/kafka-go v0.4.46
 	github.com/sirupsen/logrus v1.9.3
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/zitadel/oidc v1.13.5
 )
