@@ -3,6 +3,7 @@ package csv
 import (
 	"encoding/csv"
 	"fmt"
+	"github.com/brianvoe/gofakeit/v6"
 	"os"
 	"testing"
 
@@ -17,8 +18,10 @@ func TestName(t *testing.T) {
 	assert.Equal(t, 4, len(records))
 	assert.Equal(t, "Bangkok", records[1][0])
 	assert.Equal(t, "Cuba", records[3][1])
+	t.Logf("Hacker news of the day: %s", gofakeit.HackerPhrase())
 }
 
+// readCsvFile format: Bangkok,Thailand
 func readCsvFile(filePath string) ([][]string, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
