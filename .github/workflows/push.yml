@@ -1,0 +1,70 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  # check https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/
+  # GitHub Actions: Skip pull request and push workflows with [skip ci]
+  test:
+    name: Test
+    strategy:
+      matrix:
+        go-version: [1.20.x]
+        # platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [ubuntu-latest]
+    runs-on: ${{matrix.platform}}
+    steps:
+      # test hcp secrets integration
+      - shell: bash
+        env:
+          HI: ${{ secrets.HELLO }}
+        run: |
+          echo "$HI (it's not really a secret)"    
+      - name: Set up Go ${{matrix.go-version}}
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{matrix.go-version}}
+        id: go
+
+      - name: Cache Go modules packages
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
+
+      - name: Download Go modules
+        run: go mod download
+        env:
+          GOPROXY: https://proxy.golang.org
+
+      - name: Build
+        run: go build ./...
+
+      - name: Test
+        run: go test
+
+
+  # fresh from the market: https://github.com/marketplace/actions/run-golangci-lint
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+          version: latest
+          # see https://github.com/golangci/golangci-lint-action/issues/297
+          args: --timeout 2m0s
+

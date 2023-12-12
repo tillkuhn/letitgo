@@ -1,0 +1,215 @@
+# Publishing images to GitHub Packages
+#
+# https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-github-packages
+# How to Publish a Docker Image to GitHub's Container Registry
+
+# Sample workflow / Dockerfile setup for passing variables to build context (and the final binary)
+# https://github.com/SchrodingersGat/InvenTree/blob/c34b7802b8d08f4165371f9479548dc0024f5042/.github/workflows/docker.yaml
+
+# Get the current pushed tag in GitHub Actions
+# https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
+
+# Good: Automate Docker Image Builds and Push to GitHub Registry Using GitHub Actions 🐙
+# https://dev.to/ken_mwaura1/automate-docker-image-builds-and-push-to-github-registry-using-github-actions-4h20
+
+name: Publish
+
+env:
+  REGISTRY: ghcr.io  # Must be set to ghcr.io.
+  IMAGE_NAME: ${{ github.repository }}
+
+on:
+  push:
+    tags:
+      - v*
+    #branches:
+    #  - main # temporary only
+
+jobs:
+  go-releaser:
+    name: Release go binaries
+    runs-on: ubuntu-latest
+    # remove '#' to disable only the goreleaser job temporarily
+    # if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write  # required for go-releaser to add packages
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v3
+      -
+        name: Store Git info in Environment for goreleaser
+        run: |
+          # tag can be extracted from GITHUB_REF which contains the checked out ref, e.g. refs/tags/v1.2.3
+          echo "commit_tag=${GITHUB_REF#refs/*/}"                   >> $GITHUB_ENV
+          echo "commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+          echo "commit_date=$(git show -s --format=%ci)"            >> $GITHUB_ENV
+          echo "build_date=$(date +'%Y-%m-%dT%H:%M:%S')"          >> $GITHUB_ENV
+      -
+        name: Run GoReleaser to build and release binaries
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean # --rm-dist is deprecated
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # parallel matrix job for docker build'n'push
+  ghcr-releaser:
+    name: Release container images
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write  # for ghcr push
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v3
+      -
+        name: Extract docker metadata (tags, labels)
+        id: meta # use like ${{ steps.meta.outputs.labels }}, or 'tags' and 'version'
+        uses: docker/metadata-action@v4 # https://github.com/docker/metadata-action
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      -
+        name: Store Git info in Environment for docker build args
+        run: |
+          echo "Meta Labels: ${{ steps.meta.outputs.labels }}"
+          echo "Meta Tags: ${{ steps.meta.outputs.tags}}"
+          echo "Meta Version: ${{ steps.meta.outputs.version}}"
+          # variables for build args, prefer meta output (like version) and only add what's not defined there 
+          echo "commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+          echo "commit_date=$(git show -s --format=%ci)"            >> $GITHUB_ENV
+          echo "build_date=$(date +'%Y-%m-%dT%H:%M:%S')"            >> $GITHUB_ENV
+      # https://docs.docker.com/build/ci/github-actions/multi-platform/
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2 # https://github.com/docker/setup-qemu-action
+        with:
+          # since we run platform specific builds in parallel, we only need the specific platform
+          platforms: ${{ matrix.platform }}
+      -
+        name: Set up Docker Buildx for Multiple platform builds
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          #  You can use the ${{ github.actor }} context to automatically use the username of the user that triggered the workflow run.
+          username: ${{ github.actor }}
+          # You can use the automatically-generated GITHUB_TOKEN secret for the password
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Tips for multi-platform builds
+      # https://docs.docker.com/build/ci/github-actions/multi-platform/
+      # https://actuated.dev/blog/multi-arch-docker-github-actions
+      #
+      # CAUTION: platform: (...) requires docker/setup-buildx-action, or you get
+      # ERROR: Multiple platforms feature is currently not supported for docker driver. (...)
+      # https://github.com/docker/build-push-action/issues/302
+      #
+      # How to get supported platforms for docker image with docker?
+      # https://piraces.dev/short-bits/docker-list-supported-platforms-image/
+      # docker manifest inspect <my-image>:<my-tag>
+      -
+        name: Build and push Docker image
+        id: build # so we can use ${{ steps.build.outputs.digest }} in export step
+        uses: docker/build-push-action@v4 # https://github.com/docker/build-push-action
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          # don't set tags here, or you get can't push tagged ref by digest
+          # tags: ${{ steps.meta.outputs.tags }}
+          # push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          # See GitHub Action produces unknown architecture and OS
+          # https://github.com/docker/build-push-action/issues/820
+          provenance: false
+          build-args: |
+            commit_tag=${{ steps.meta.outputs.version }}
+            commit_hash=${{ env.commit_hash }}
+            commit_date=${{ env.commit_date }}
+            build_date=${{ env.build_date }}
+          # https://docs.docker.com/build/cache/backends/gha/ GitHub Actions cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+      -
+        name: Export image digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+      -
+        name: Upload image digest
+        uses: actions/upload-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  # dedicated merge jobs which runs after all platform specific build jobs are finished
+  # see https://docs.docker.com/build/ci/github-actions/multi-platform/
+  # see https://github.com/docker/build-push-action/issues/846
+  merge-manifests:
+    runs-on: ubuntu-latest
+    needs:
+      - ghcr-releaser
+    steps:
+      -
+        name: Download image digests
+        uses: actions/download-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests
+      -
+        name: Set up Docker Buildx # but no need for QEMU in this job
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Extract docker metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+      -
+        name: Inspect new multi-platform image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}          
+
+  # see https://github.com/docker/build-push-action/issues/846
+  test-image:
+    runs-on: ubuntu-latest
+    needs:
+      - merge-manifests
+    steps:
+      -
+        name: Extract docker metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      -
+        name: Run docker image with version output
+        run: |
+          docker run --quiet --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }} version

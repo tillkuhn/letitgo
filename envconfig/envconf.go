@@ -1,5 +1,5 @@
-// Package config provides utils that make it easier to configure your app
-package config
+// Package envconfig provides utils that make it easier to configure your app
+package envconfig
 
 import (
 	"log"
@@ -14,7 +14,7 @@ type Config struct {
 	MaxAttempts int            `default:"4" required:"true" desc:"Max attempts" split_words:"true"`
 	Brokers     []string       `required:"false" desc:"List of brokers" split_words:"true"`
 	ColorCodes  map[string]int `split_words:"true"`
-	ApiKey      string         `required:"true" split_words:"true"`
+	SomeKey     string         `required:"true" split_words:"true"`
 }
 
 // ProcessEnv configures the app with https://github.com/kelseyhightower/envconfig

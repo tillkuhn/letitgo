@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIntEnum(t *testing.T) {
+func TestRiceIntEnum(t *testing.T) {
 
 	// The verb %v ('v' for 'value') always formats the argument in its default form, just how Print or Println would show
 	// The special verb %T ('T' for 'Type') prints the type of the argument rather than its value.
@@ -18,9 +18,11 @@ func TestIntEnum(t *testing.T) {
 	// isEqual1 := Basmati == "Basmati" // compile error mismatched types Rice and untyped string
 	rice := Basmati
 	assert.Equal(t, Basmati, rice)
-	assert.NotEqual(t, 1, Basmati)  // not equal enum.Rice(1) and int(1)
-	assert.False(t, rice == Jasmin) // sure it's false, but no compile error if you compare
-	p := fmt.Sprintf("%v", TomKa)   // prints 1 as there is no String()
+	assert.NotEqual(t, 1, Basmati)     // not equal enum.Rice(1) and int(1)
+	assert.False(t, rice == Jasmin)    // sure it's false, but no compile error if you compare
+	assert.NotEqual(t, Patna, Basmati) // not equal enum.Rice(1) and int(1)
+
+	p := fmt.Sprintf("%v", TomKa) // prints 1 as there is no String()
 	assert.Equal(t, "1", p)
 	assert.Equal(t, 0, int(Pho)) // works int == int
 
@@ -30,6 +32,8 @@ func TestStringEnum(t *testing.T) {
 	assert.Equal(t, "JPG", fmt.Sprintf("%v", Jpeg))
 	assert.True(t, Jpeg == "JPG") // yes you can do that
 	assert.False(t, Jpeg == "NIX")
-	strVal := string(Png)
+	assert.True(t, Gif == "GIF")
+	// strVal is a string
+	strVal := string(Png) // redundant, see next line
 	assert.Equal(t, "PNG", strVal)
 }

@@ -4,3 +4,4 @@ dist/
 testfiles/
 coverage.out
 coverage.html
+sqlite-database.db

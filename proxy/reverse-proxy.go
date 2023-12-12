@@ -5,7 +5,7 @@ package proxy
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -45,7 +45,7 @@ func errorHandler() func(http.ResponseWriter, *http.Request, error) {
 func modifyResponse() func(*http.Response) error {
 	return func(resp *http.Response) error {
 		// return errors.New("response body is invalid")
-		buf, err := ioutil.ReadAll(resp.Body)
+		buf, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Printf("Error reading request body: %v", err.Error())
 			// http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -55,7 +55,7 @@ func modifyResponse() func(*http.Response) error {
 			log.Printf("  RespHeader field %q, Value %q", k, v)
 		}
 		log.Printf("Response body: %v", len(buf))
-		reader := ioutil.NopCloser(bytes.NewBuffer(buf))
+		reader := io.NopCloser(bytes.NewBuffer(buf))
 		resp.Body = reader
 
 		return nil
@@ -70,14 +70,14 @@ func RequestHandler(proxy *httputil.ReverseProxy) func(http.ResponseWriter, *htt
 		for k, v := range r.Header {
 			log.Printf("  ReqHeader field %q, Value %q", k, v)
 		}
-		buf, err := ioutil.ReadAll(r.Body)
+		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			log.Printf("Error reading request body: %v", err.Error())
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		log.Printf("Request body: %v", string(buf))
-		reader := ioutil.NopCloser(bytes.NewBuffer(buf))
+		reader := io.NopCloser(bytes.NewBuffer(buf))
 		r.Body = reader
 		proxy.ServeHTTP(w, r)
 	}
