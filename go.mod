@@ -3,7 +3,7 @@ module github.com/tillkuhn/letitgo
 go 1.21
 
 require (
-	github.com/brianvoe/gofakeit/v6 v6.26.0
+	github.com/brianvoe/gofakeit/v6 v6.26.4
 	github.com/dustin/go-humanize v1.0.1
 	github.com/go-echarts/go-echarts/v2 v2.3.2
 	github.com/go-redis/redis/v8 v8.11.5
