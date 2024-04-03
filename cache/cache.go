@@ -1,10 +1,11 @@
 package cache
 
 import (
-	"github.com/jellydator/ttlcache/v3"
 	"log"
 	"math/rand/v2"
 	"time"
+
+	"github.com/jellydator/ttlcache/v3"
 )
 
 func Run() {

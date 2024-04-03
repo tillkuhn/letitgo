@@ -1,9 +1,10 @@
 package dns
 
 import (
-	"github.com/stretchr/testify/assert"
 	"net"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDNS(t *testing.T) {

@@ -3,10 +3,11 @@ package httpserver
 import (
 	"context"
 	"fmt"
-	"golang.org/x/time/rate"
 	"io"
 	"net/http"
 	"time"
+
+	"golang.org/x/time/rate"
 )
 
 // ExpensiveHTTPClient Rate Limited HTTP Client

@@ -3,9 +3,10 @@ package csv
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/brianvoe/gofakeit/v6"
 	"os"
 	"testing"
+
+	"github.com/brianvoe/gofakeit/v6"
 
 	"github.com/stretchr/testify/assert"
 )
