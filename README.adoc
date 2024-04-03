@@ -7,32 +7,9 @@ and follow the advice of their "Bug Gopher"!
 
 image:https://raw.githubusercontent.com/golangci/golangci-lint/master/assets/go.png[alt=Flower,width=240,height=240]
 
-== Snippets
+== Cobra CLI Usage
 
-=== Add recent version of a module
-
-----
-$ go get "github.com/kelseyhightower/envconfig"
-go get: added github.com/kelseyhightower/envconfig v1.4.0
-----
-
-=== Setup Git Pre-commit hook
-
-* https://freshman.tech/linting-golang/#setting-up-a-pre-commit-hook[]
-* https://pre-commit.com/#install[Install pre-commit to manage multi-language pre-commit hooks (python based)]
-* https://github.com/TekWizely/pre-commit-golang[a complete repo full of golang pre-commit hooks]
-
----
-
-== Cobra CLI
-
-=== Refs
-
-* https://github.com/spf13/cobra-cli/blob/main/README.md[Official README]
-* https://towardsdatascience.com/how-to-create-a-cli-in-golang-with-cobra-d729641c7177[How to create a CLI in golang with cobra]
-* https://github.com/spf13/cobra/blob/master/user_guide.md#using-the-cobra-library[Using the Cobra Library]
-
-=== Install and init
+=== Install and init Cobra CLI for new Project
 
 ----
 $ go get -u github.com/spf13/cobra@latest
@@ -45,7 +22,7 @@ $ go run main.go
 A longer description that spans multiple lines and likely contains
 ----
 
-=== Add a Cobra Command
+=== Add a Cobra Command for existing Project
 
 .Example to add a 'serve' command, this creates a file `cmd/server.go`
 ----
@@ -82,8 +59,30 @@ $ go run main.go serve
 Running server
 ----
 
-=== Links
+== Snippets
+
+=== Add recent version of a module
+
+----
+$ go get "github.com/kelseyhightower/envconfig"
+go get: added github.com/kelseyhightower/envconfig v1.4.0
+----
+
+=== Setup Git Pre-commit hook
+
+* https://freshman.tech/linting-golang/#setting-up-a-pre-commit-hook[]
+* https://pre-commit.com/#install[Install pre-commit to manage multi-language pre-commit hooks (python based)]
+* https://github.com/TekWizely/pre-commit-golang[a complete repo full of golang pre-commit hooks]
+
+
+== Links
 
 * https://github.com/tillkuhn/letitgo[Let it Go - My Personal Go Playground]
 * https://carlosvin.github.io/langs/en/posts/rest-service-go-vs-java/[Golang over Java for REST services]
 * http://www.inanzzz.com/index.php/post/fb0m/mocking-and-testing-http-clients-in-golang[Mocking and testing HTTP clients in Golang]
+
+=== Cobra
+
+* https://github.com/spf13/cobra-cli/blob/main/README.md[Official README]
+* https://towardsdatascience.com/how-to-create-a-cli-in-golang-with-cobra-d729641c7177[How to create a CLI in golang with cobra]
+* https://github.com/spf13/cobra/blob/master/user_guide.md#using-the-cobra-library[Using the Cobra Library]

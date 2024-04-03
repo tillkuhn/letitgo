@@ -64,6 +64,10 @@ outdated: ## show outdated direct dependencies
 run: ## runs app w/o args (shows help)
 	@go run main.go
 
+.PHONY: cache
+cache: ## runs app with cache command
+	go run main.go cache
+
 .PHONY: charts
 db: ## runs app with db command
 	PGHOST=$(shell cat ~/.secret/cockroachdb/horsthost) PGDATABASE="horstdb" PGUSER="horst" \
