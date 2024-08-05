@@ -23,7 +23,7 @@ require (
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
 	github.com/zitadel/oidc v1.13.5
-	golang.org/x/time v0.5.0
+	golang.org/x/time v0.6.0
 )
 
 require (
