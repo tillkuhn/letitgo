@@ -14,13 +14,12 @@ import (
 //
 // Example Usage:
 //
-//	 w := Worker[Job]{}
-//	 w.Start(func(job Job){ fmt.Printf("Processing Job %v",job) },10)
-//	 for i, id := range []int{1, 32, 45, 667, 22} {
-//	    w.TryEnqueue(Job{Seq: i, Id: id})
-//	  }
-//	  w.Stop()
-//
+//	w := Worker[Job]{}
+//	w.Start(func(job Job){ fmt.Printf("Processing Job %v",job) },10)
+//	for i, id := range []int{1, 32, 45, 667, 22} {
+//	   w.TryEnqueue(Job{Seq: i, Id: id})
+//	 }
+//	 w.Stop()
 type Worker[T any] struct {
 	jobFunc func(T) error
 	jobChan chan T
