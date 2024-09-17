@@ -10,7 +10,7 @@ import (
 func WaitAndExec() {
 	// Defining duration parameter of
 	// AfterFunc() method
-	callAfter := time.Duration(3) * time.Second
+	callAfter := time.Duration(1) * time.Second
 
 	// Defining function parameter of
 	// AfterFunc() method
