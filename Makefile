@@ -95,6 +95,14 @@ oidc-server: ## run github.com/zitadel/oidc/example/server, serve http://localho
 prometheus: ## run app with prometheus command
 	go run main.go prometheus
 
+.PHONY: rpc
+rpc: ## run app with rpc (server) command
+	go run main.go rpc
+
+.PHONY: rpc-client
+rpc-client: ## run app with rpc (client) command
+	go run main.go rpc --client
+
 .PHONY: serve
 serve: ## runs app with serve command
 	go run main.go serve
@@ -115,11 +123,11 @@ stack: ## run app with stack command (generics support)
 ticker: ## runs app with ticker command
 	go run main.go ticker
 
-.PHONY: worker
-worker: ## run app with worker (job queue) command
-	go run main.go worker
-
 .PHONY: version
 version: ## run app with version command
 	go run main.go version
+
+.PHONY: worker
+worker: ## run app with worker (job queue) command
+	go run main.go worker
 
