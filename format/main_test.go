@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTokeExpiry(t *testing.T) {
+func TestTokenExpiry(t *testing.T) {
 	claims := make(map[string]interface{})
 	now := time.Now().Unix()
 
@@ -26,4 +26,8 @@ func TestTokeExpiry(t *testing.T) {
 	assert.Equal(t, "", expiryInfo)
 	assert.Error(t, err)
 
+}
+
+func TestTemplateString(t *testing.T) {
+	assert.Contains(t, TemplateString(), "*****")
 }

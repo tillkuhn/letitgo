@@ -1,7 +1,9 @@
 package format
 
 import (
+	"bytes"
 	"fmt"
+	"text/template"
 	"time"
 
 	"github.com/dustin/go-humanize"
@@ -34,4 +36,15 @@ func FunWithStringSlices() {
 
 	s3 := "维基百科:关于中文维基百科"
 	fmt.Println(string([]rune(s3)[2:9])) // prints 百科:关于中文
+}
+
+// TemplateString single value replacement
+func TemplateString() string {
+	str := "postgres://user:{{.password}}@localhost:5432/{{.db}}?sslmode=require"
+	m := map[string]interface{}{"password": "*****", "db": "my_db"}
+	var tpl bytes.Buffer
+	t := template.Must(template.New("").Parse(str))
+	_ = t.Execute(&tpl, m)
+	fmt.Println(tpl.String())
+	return tpl.String()
 }
