@@ -1,6 +1,7 @@
 module github.com/tillkuhn/letitgo
 
 go 1.22
+toolchain go1.23.7
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.28.0
@@ -23,7 +24,7 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
 	github.com/zitadel/oidc v1.13.5
-	golang.org/x/time v0.10.0
+	golang.org/x/time v0.11.0
 )
 
 require (
