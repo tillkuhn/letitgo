@@ -14,7 +14,7 @@ jobs:
     name: Test
     strategy:
       matrix:
-        go-version: [1.22.x]
+        go-version: [1.24.x]
         # platform: [ubuntu-latest, macos-latest, windows-latest]
         # https://docs.github.com/de/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners
         # new labels for public-preview ARM runners ubuntu-24.04-arm ubuntu-22.04-arm
@@ -27,6 +27,7 @@ jobs:
           HI: ${{ secrets.HELLO }}
         run: |
           echo "$HI (it's not really a secret)"
+          uname -a
       - name: Set up Go ${{matrix.go-version}}
         uses: actions/setup-go@v3
         with:
