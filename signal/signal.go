@@ -41,7 +41,6 @@ func GracefulHttpServerWithShutdown() {
 	}
 	// Initiate dispatcher shutdown, which will wait for all workers to finish work and close
 	os.Exit(0)
-
 }
 
 func HealthHandler(w http.ResponseWriter, _ *http.Request) {

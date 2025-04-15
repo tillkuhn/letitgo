@@ -1,0 +1,83 @@
+# reference: https://github.com/golangci/golangci-lint/blob/HEAD/.golangci.reference.yml
+version: "2"
+run:
+  issues-exit-code: 1
+  tests: true
+linters:
+  # Default set of linters.
+  # The value can be: `standard`, `all`, `none`, or `fast`.
+  # Default: standard
+  default: standard
+#  enable:
+#    - copyloopvar
+#    - cyclop
+#    - dogsled
+#    - dupl
+#    - err113
+#    - errorlint
+#    - exhaustive
+#    - funlen
+#    - gochecknoglobals
+#    - goconst
+#    - gocritic
+#    - gocyclo
+#    - goprintffuncname
+#    - gosec
+#    - misspell
+#    - mnd
+#    - nakedret
+#    - nestif
+#    - nilerr
+#    - noctx
+#    - nolintlint
+#    - prealloc
+#    - promlinter
+#    - revive
+#    - unconvert
+#    - unparam
+#    - whitespace
+  settings:
+    funlen:
+      lines: 100
+      statements: 50
+  exclusions:
+    generated: lax
+    presets:
+      #- comments
+      #- common-false-positives
+      #- legacy
+      #- std-error-handling
+    rules:
+      #- linters:
+      #    - gosec
+      #  text: 'G404:'
+      #- linters:
+      #    - gosec
+      #  path: pkg/tracker/ioreg.go
+      #  text: 'G204:'
+
+      # more exclusions for _test files
+      - linters:
+          - funlen
+          - gochecknoglobals
+          - gosec
+          - noctx
+          - errcheck
+        path: _test\.go
+      #- linters:
+      #    - gochecknoglobals
+      #  path: internal/version/version.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

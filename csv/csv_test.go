@@ -26,14 +26,14 @@ func TestName(t *testing.T) {
 func readCsvFile(filePath string) ([][]string, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
-		return nil, fmt.Errorf("unable to read input file %s: %v", filePath, err)
+		return nil, fmt.Errorf("unable to read input file %s: %w", filePath, err)
 	}
 	defer f.Close()
 
 	csvReader := csv.NewReader(f)
 	records, err := csvReader.ReadAll()
 	if err != nil {
-		return nil, fmt.Errorf("unable to parse csv for %s: %v", filePath, err)
+		return nil, fmt.Errorf("unable to parse csv for %s: %w", filePath, err)
 	}
 
 	return records, nil

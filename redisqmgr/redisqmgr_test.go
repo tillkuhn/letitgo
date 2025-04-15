@@ -80,7 +80,7 @@ func TestQueueNameQualifiedAndWithoutNamespace(t *testing.T) {
 	assert.Equal(t, "hase-horst", rq.QueueWithNamespace("hase-horst"))
 }
 
-//func TestBlockingWithCancel(t *testing.T) {
+// func TestBlockingWithCancel(t *testing.T) {
 //	ctx, cancel := context.WithCancel(context.Background())
 //	// start goroutine with a new context
 //	go handleRequest(ctx, 1)
@@ -88,7 +88,7 @@ func TestQueueNameQualifiedAndWithoutNamespace(t *testing.T) {
 //	cancel()
 //}
 //
-//func handleRequest(ctx context.Context, incr int) {
+// func handleRequest(ctx context.Context, incr int) {
 //	fmt.Println("New request registered: ", incr+1)
 //	for i := 0; i <= 100; i++ {
 //		fmt.Println("Request: ", incr+1, " | Sub-task: ", i+1)

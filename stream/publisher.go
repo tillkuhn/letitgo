@@ -67,11 +67,11 @@ func (p *KafkaPublisher) WriteMessageToTopic(ctx context.Context, topic string, 
 		},
 	)
 	if err != nil {
-		return fmt.Errorf("failed to write messages to %s: %v", topic, err)
+		return fmt.Errorf("failed to write messages to %s: %w", topic, err)
 	}
 
 	if err := w.Close(); err != nil {
-		return fmt.Errorf("failed to close writer for %s: %v", topic, err)
+		return fmt.Errorf("failed to close writer for %s: %w", topic, err)
 	}
 	p.logger.Info().Msgf("Successfully pushed %d bytes to topic %s", len(message), topic)
 	return nil
@@ -106,7 +106,7 @@ func (p *KafkaPublisher) CreateTopic(topic string, partitions int) error {
 	if err != nil {
 		return err
 	}
-	defer conn.Close()
+	defer func(conn *kafka.Conn) { _ = conn.Close() }(conn)
 
 	controller, err := conn.Controller()
 	if err != nil {
@@ -117,7 +117,7 @@ func (p *KafkaPublisher) CreateTopic(topic string, partitions int) error {
 	if err != nil {
 		return err
 	}
-	defer controllerConn.Close()
+	defer func(controllerConn *kafka.Conn) { _ = controllerConn.Close() }(controllerConn)
 
 	p.logger.Debug().Msgf("About to create topic %s with %d partitions", topic, partitions)
 	topicConfigs := []kafka.TopicConfig{

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"sync"
@@ -125,7 +126,7 @@ func (rq *QueueMgr) queueWorker(ctx context.Context, queueShort string, callback
 		// command returns a two element array where the first element is the key and the second value is the popped element.
 		results, err := rq.redisClient.BLPop(ctx, rq.listenerTimeout, queue).Result()
 		// redis.nil is OK if the key doesn't exist
-		if err != nil && err != redis.Nil {
+		if err != nil && !errors.Is(err, redis.Nil) {
 			logger.Error().Msgf("Error during pop %s: %v", queue, err)
 		}
 		if len(results) > 1 { // expect 2, fist is the queue name, 2nd is the value

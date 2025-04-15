@@ -43,12 +43,11 @@ func ConnectWithRetry() {
 			break
 		}
 	}
-	//connected
+	// connected
 	b.Reset()
 	if conn != nil {
 		_, _ = conn.Write([]byte("hello world!"))
 		// ... Read ... Write ... etc
 		_ = conn.Close()
 	}
-
 }

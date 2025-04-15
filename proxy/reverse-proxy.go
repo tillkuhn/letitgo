@@ -66,7 +66,7 @@ func modifyResponse() func(*http.Response) error {
 func RequestHandler(proxy *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Serving %s %s %s", r.Method, r.URL, r.Proto)
-		//Iterate over all header fields
+		// Iterate over all header fields
 		for k, v := range r.Header {
 			log.Printf("  ReqHeader field %q, Value %q", k, v)
 		}

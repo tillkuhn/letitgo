@@ -8,7 +8,6 @@ import (
 )
 
 func TestRiceIntEnum(t *testing.T) {
-
 	// The verb %v ('v' for 'value') always formats the argument in its default form, just how Print or Println would show
 	// The special verb %T ('T' for 'Type') prints the type of the argument rather than its value.
 	//  Implicitly Calls String() and prints "Rice: BasmatiStr (enum.Rice)"
@@ -25,7 +24,6 @@ func TestRiceIntEnum(t *testing.T) {
 	p := fmt.Sprintf("%v", TomKa) // prints 1 as there is no String()
 	assert.Equal(t, "1", p)
 	assert.Equal(t, 0, int(Pho)) // works int == int
-
 }
 
 func TestStringEnum(t *testing.T) {

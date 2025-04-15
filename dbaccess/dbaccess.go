@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/lib/pq"
-	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 )
 
@@ -20,7 +19,6 @@ func Run() {
 
 // Connect  function will make a connection to the database only once.
 func connect() error {
-
 	// Example local: postgres://postgres:password@localhost/DB_1?sslmode=disable
 	// Example postgresql://<user>:<pass>@xyz-4782.7tc.cockroachlabs.cloud:26257/horstdb?sslmode=verify-full
 	// if you get errors, dry prefixing the database name with the first part of the host (e.g. xyz-4782.horstdb)
@@ -59,7 +57,7 @@ func connect() error {
 	if err != nil {
 		return errors.Wrap(err, "query db")
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) { _ = rows.Close() }(rows)
 	var count int
 	for rows.Next() {
 		count++

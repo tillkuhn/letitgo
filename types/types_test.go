@@ -12,7 +12,6 @@ import (
 // https://emersion.fr/blog/2017/sets-in-go/
 
 func TestSet(t *testing.T) {
-
 	// Create a set
 	set := make(map[string]struct{})
 

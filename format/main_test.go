@@ -25,7 +25,6 @@ func TestTokenExpiry(t *testing.T) {
 	expiryInfo, err = HumanizeTokenExpiry(claims)
 	assert.Equal(t, "", expiryInfo)
 	assert.Error(t, err)
-
 }
 
 func TestTemplateString(t *testing.T) {

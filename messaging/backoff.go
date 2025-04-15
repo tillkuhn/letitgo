@@ -13,7 +13,7 @@ import (
 func RunWithBackoff(maxAttempts int) error {
 	attempts := 0
 	b := &backoff.Backoff{
-		//These are the defaults
+		// These are the defaults
 		Min:    10 * time.Millisecond,
 		Max:    2000 * time.Millisecond,
 		Factor: 2,
@@ -30,7 +30,7 @@ func RunWithBackoff(maxAttempts int) error {
 			break
 			// we have an error - either try again or give up
 		} else if attempts >= maxAttempts {
-			errMsg := fmt.Sprintf("error %s, max Attemps %d reached. I give up", err, maxAttempts)
+			errMsg := fmt.Sprintf("error %s, max Attempts %d reached. I give up", err, maxAttempts)
 			log.Print(errMsg)
 			return errors.New(errMsg)
 		} else {
@@ -39,7 +39,7 @@ func RunWithBackoff(maxAttempts int) error {
 			time.Sleep(d)
 		}
 	}
-	//connected
+	// connected
 	b.Reset()
 	// do something with con
 	err := conn.Close()

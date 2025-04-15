@@ -9,7 +9,6 @@ import (
 )
 
 func TestName(t *testing.T) {
-
 	req, err := http.NewRequest(http.MethodPost, "/test", nil)
 	assert.NoError(t, err)
 	rw := httptest.NewRecorder()

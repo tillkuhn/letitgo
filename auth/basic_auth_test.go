@@ -55,7 +55,6 @@ func TestBasicAuth(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, respAuthOK.StatusCode)
 	assert.Contains(t, string(body), successResponse)
-
 }
 
 func protectedFunc(res http.ResponseWriter, req *http.Request) {

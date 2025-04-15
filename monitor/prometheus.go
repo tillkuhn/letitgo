@@ -19,7 +19,6 @@ func increment(counter prometheus.Counter) func(http.ResponseWriter, *http.Reque
 		if _, err := w.Write([]byte(msg)); err != nil {
 			log.Print(err.Error())
 		}
-
 	}
 }
 func RunPrometheus() {

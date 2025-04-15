@@ -45,7 +45,7 @@ const (
 	Gif  Extension = "GIF" // do not omit extension SA9004: only the first constant in this group has an explicit type
 )
 
-//func (e Extension) String() string {
+// func (e Extension) String() string {
 //	extensions := [...]string{"JPG", "PNG", "GIF", "BMP"}
 //
 //	x := string(e)

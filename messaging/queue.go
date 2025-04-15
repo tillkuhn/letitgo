@@ -43,5 +43,4 @@ func (s *Queue) Dequeue() interface{} {
 	// s.items = s.items[:len(s.items)-1]
 	s.items = s.items[1:] // use simpler re-slice approach
 	return first
-
 }

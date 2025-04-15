@@ -16,7 +16,9 @@ jobs:
       matrix:
         go-version: [1.22.x]
         # platform: [ubuntu-latest, macos-latest, windows-latest]
-        platform: [ubuntu-latest]
+        # https://docs.github.com/de/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners
+        # new labels for public-preview ARM runners ubuntu-24.04-arm ubuntu-22.04-arm
+        platform: [ ubuntu-24.04-arm ] # ubuntu-latest
     runs-on: ${{matrix.platform}}
     steps:
       # test hcp secrets integration
@@ -24,7 +26,7 @@ jobs:
         env:
           HI: ${{ secrets.HELLO }}
         run: |
-          echo "$HI (it's not really a secret)"    
+          echo "$HI (it's not really a secret)"
       - name: Set up Go ${{matrix.go-version}}
         uses: actions/setup-go@v3
         with:

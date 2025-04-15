@@ -25,7 +25,6 @@ func RunTickerWithChannel() {
 // RunTickerFuncWithChannel runs the ticket function once immediately, afterwards in regular intervals
 // until
 func RunTickerFuncWithChannel(tickerFunc func(t time.Time), interval time.Duration) chan bool {
-
 	doneChan := make(chan bool)
 	go func() {
 		ticker := time.NewTicker(interval)
@@ -43,11 +42,10 @@ func RunTickerFuncWithChannel(tickerFunc func(t time.Time), interval time.Durati
 		}
 	}()
 	return doneChan
-
 }
 
 // RunTickerSimple simplified version based on https://stackoverflow.com/a/53057336/4292075
-//func RunTickerSimple() {
+// func RunTickerSimple() {
 //	ticker := time.NewTicker(1 * time.Second)
 //	go func() {
 //		for range ticker.C {

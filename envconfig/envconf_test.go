@@ -28,7 +28,6 @@ func TestEnvConfig(t *testing.T) {
 	assert.Equal(t, 42, c.MaxAttempts)
 	assert.Equal(t, []string{"localhost:44", "localhost:55", "localhost:66"}, c.Brokers)
 	assert.Equal(t, 3, len(c.ColorCodes))
-
 }
 
 func TestEnvConfigError(t *testing.T) {

@@ -15,7 +15,6 @@ func WaitAndExec() {
 	// Defining function parameter of
 	// AfterFunc() method
 	f := func() {
-
 		// Printed when it's called by the
 		// AfterFunc() method in the time
 		// stated above

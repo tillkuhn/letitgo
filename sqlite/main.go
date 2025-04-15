@@ -12,19 +12,24 @@ import (
 // * https://www.codeproject.com/Articles/5261771/Golang-SQLite-Simple-Example
 // * https://antonz.org/json-virtual-columns/
 func Run() {
-	// os.Remove("sqlite-database.db") // obsolete since Create truncates if the file aready exists
+	// os.Remove("sqlite-database.db") // obsolete since Create truncates if the file already exists
 
 	log.Println("Creating sqlite-database.db...")
 	file, err := os.Create("sqlite-database.db") // Create SQLite file
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	file.Close()
+	if err := file.Close(); err != nil {
+		return
+	}
+
 	log.Println("sqlite-database.db created")
 
 	sqliteDatabase, _ := sql.Open("sqlite3", "./sqlite-database.db") // Open the created SQLite File
-	defer sqliteDatabase.Close()                                     // Defer Closing the database
-	createTable(sqliteDatabase)                                      // Create Database Tables
+	defer func(sqliteDatabase *sql.DB) {
+		_ = sqliteDatabase.Close()
+	}(sqliteDatabase) // Defer Closing the database
+	createTable(sqliteDatabase) // Create Database Tables
 
 	// INSERT RECORDS
 	insertStudent(sqliteDatabase, "0001", "Liana Kim", "Bachelor")
@@ -81,7 +86,7 @@ func displayStudents(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer row.Close()
+	defer func(row *sql.Rows) { _ = row.Close() }(row)
 	for row.Next() { // Iterate and fetch the records from result cursor
 		var id int
 		var code string

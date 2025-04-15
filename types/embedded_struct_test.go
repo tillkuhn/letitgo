@@ -34,7 +34,6 @@ type Report struct {
 }
 
 func TestEmbedded(t *testing.T) {
-
 	rep := Report{
 		Params: Params{
 			Name: "Hase",

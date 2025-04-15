@@ -59,10 +59,7 @@ func justDoingMyJob(job PizzaJob) error {
 // this allows us to make predictable tests on queue size, and release the jobs subsequently
 func justDoingMyBlockingJob(unblock *bool) func(job PizzaJob) error {
 	return func(job PizzaJob) error {
-		for {
-			if *unblock {
-				break
-			}
+		for !*unblock {
 			time.Sleep(10 * time.Millisecond)
 		}
 		return nil

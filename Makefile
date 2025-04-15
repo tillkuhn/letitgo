@@ -48,7 +48,7 @@ imports: ## goimports -w -l .
 	goimports -w -l .
 
 lint: imports ## golangci-lint run (./... is implicit, also implies target imports)
-	golangci-lint run
+	golangci-lint run --fix
 
 .PHONY: update
 update: ## update go dependencies
